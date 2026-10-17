@@ -32,6 +32,11 @@ def privacy():
     return render_template("privacy.html")
 
 
+@app.errorhandler(404)
+def not_found(error):
+    return render_template("404.html"), 404
+
+
 # ------------------------------------------------------------------ #
 # Placeholder routes — students will implement these                  #
 # ------------------------------------------------------------------ #

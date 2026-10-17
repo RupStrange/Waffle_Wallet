@@ -1,50 +1,79 @@
 {% extends "base.html" %}
 
-{% block title %}Privacy Policy — Spendly{% endblock %}
+{% block title %}Privacy Policy — Waffle Wallet{% endblock %}
 
 {% block content %}
 
 <section class="legal-section">
-    <div class="legal-container">
+    <div class="legal-wrap">
 
-        <h1 class="legal-title">Privacy Policy</h1>
-        <p class="legal-updated">Last updated: October 2026</p>
+        <header class="legal-header">
+            <p class="legal-eyebrow">Your data</p>
+            <h1 class="legal-title">Privacy Policy</h1>
+            <p class="legal-updated">Last updated: October 2026</p>
+        </header>
 
-        <h2>1. Data We Collect</h2>
-        <p>
-            When you create an account we collect your name, email address and a
-            password (stored in hashed form). When you use Spendly we also store the
-            expense details you enter, such as amounts, categories, dates and
-            descriptions.
-        </p>
+        <div class="legal-layout">
+            <nav class="legal-toc" aria-label="On this page">
+                <p class="legal-toc-title">On this page</p>
+                <ol>
+                    <li><a href="#collect">Data We Collect</a></li>
+                    <li><a href="#use">How We Use Your Data</a></li>
+                    <li><a href="#storage">Data Storage</a></li>
+                    <li><a href="#third-party">Third Party Services</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ol>
+            </nav>
 
-        <h2>2. How We Use Your Data</h2>
-        <p>
-            We use your data only to operate Spendly: to sign you in, to save and
-            display your expenses, and to produce the summaries and filters you
-            request. We do not sell your personal data or use it for advertising.
-        </p>
+            <article class="legal-card">
+                <section id="collect">
+                    <h2>1. Data We Collect</h2>
+                    <p>
+                        When you create an account we collect your name, email address and a
+                        password, which is stored in hashed form. When you use Waffle Wallet we
+                        also store the expense details you enter, such as amounts, categories,
+                        dates and descriptions.
+                    </p>
+                </section>
 
-        <h2>3. Data Storage</h2>
-        <p>
-            Your data is stored in the application's database and is accessible only
-            through your account. We take reasonable measures to protect it, but no
-            system is completely secure. You can edit or delete your expenses at any
-            time.
-        </p>
+                <section id="use">
+                    <h2>2. How We Use Your Data</h2>
+                    <p>
+                        We use your data only to operate Waffle Wallet: to sign you in, to save
+                        and display your expenses, and to produce the summaries and filters you
+                        request. We do not sell your personal data or use it for advertising.
+                    </p>
+                </section>
 
-        <h2>4. Third Party Services</h2>
-        <p>
-            Spendly loads fonts from Google Fonts, which may receive your IP address
-            when a page loads. We do not share your expense data with any third
-            party. If this changes, we will update this policy.
-        </p>
+                <section id="storage">
+                    <h2>3. Data Storage</h2>
+                    <p>
+                        Your data is stored in the application's database and is accessible only
+                        through your account. We take reasonable measures to protect it, but no
+                        system is completely secure. You can edit or delete your expenses at any
+                        time.
+                    </p>
+                </section>
 
-        <h2>5. Contact Us</h2>
-        <p>
-            If you have questions about this Privacy Policy or your data, please
-            contact us at <a href="mailto:support@spendly.example" class="legal-link">support@spendly.example</a>.
-        </p>
+                <section id="third-party">
+                    <h2>4. Third Party Services</h2>
+                    <p>
+                        Waffle Wallet loads fonts from Google Fonts, which may receive your IP
+                        address when a page loads. We do not share your expense data with any
+                        third party. If this changes, we will update this policy.
+                    </p>
+                </section>
+
+                <section id="contact">
+                    <h2>5. Contact Us</h2>
+                    <p>
+                        If you have questions about this Privacy Policy or your data, please
+                        contact us at
+                        <a href="mailto:support@wafflewallet.example" class="legal-link">support@wafflewallet.example</a>.
+                    </p>
+                </section>
+            </article>
+        </div>
 
     </div>
 </section>

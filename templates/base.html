@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Spendly{% endblock %}</title>
+    <title>{% block title %}Waffle Wallet{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -12,18 +12,19 @@
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="nav-inner">
-            <a href="{{ url_for('landing') }}" class="nav-brand">
-                <span class="brand-icon">◈</span>
-                <span class="brand-name">Spendly</span>
+    <header class="ww-nav">
+        <div class="ww-nav-inner">
+            <a href="{{ url_for('landing') }}" class="ww-brand" aria-label="Waffle Wallet home" title="Waffle Wallet. Because &quot;it's fine&quot; isn't a budget.">
+                {% include "_logo.html" %}
+                Waffle Wallet
             </a>
-            <div class="nav-links">
-                <a href="{{ url_for('login') }}">Sign in</a>
-                <a href="{{ url_for('register') }}" class="nav-cta">Get started</a>
+            <nav class="ww-nav-links" aria-label="Primary">{% block nav_links %}{% endblock %}</nav>
+            <div class="ww-nav-actions">
+                <a href="{{ url_for('login') }}" class="ww-signin">Sign in</a>
+                <a href="{{ url_for('register') }}" class="ww-btn">Sign up</a>
             </div>
         </div>
-    </nav>
+    </header>
 
     <main class="main-content">
         {% block content %}{% endblock %}
@@ -31,11 +32,17 @@
 
     <footer class="footer">
         <div class="footer-inner">
-            <span class="brand-icon">◈</span>
-            <span class="footer-name">Spendly</span>
-            <p class="footer-copy">Track every rupee. Own your finances.</p>
-            <a href="{{ url_for('terms') }}">Terms and Conditions</a>
-            <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+            <div class="footer-brand">
+                {% include "_logo.html" %}
+                <div>
+                    <div class="footer-name">Waffle Wallet</div>
+                    <p class="footer-copy">Track every rupee. Inflation certainly does.</p>
+                </div>
+            </div>
+            <div class="footer-links">
+                <a href="{{ url_for('terms') }}">Terms and Conditions</a>
+                <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+            </div>
         </div>
     </footer>
 

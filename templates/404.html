@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Page not found — Waffle Wallet{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+    <div class="auth-container">
+
+        <div class="auth-header">
+            {% include "_logo.html" %}
+            <p class="legal-eyebrow">Error 404</p>
+            <h1 class="auth-title">This page went where your budget went.</h1>
+            <p class="auth-subtitle">Nowhere we can find. Let's get you back to something that exists.</p>
+        </div>
+
+        <div class="notfound-actions">
+            <a href="{{ url_for('landing') }}" class="ww-btn ww-btn-lg">Go to home</a>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

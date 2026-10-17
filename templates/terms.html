@@ -1,52 +1,81 @@
 {% extends "base.html" %}
 
-{% block title %}Terms and Conditions — Spendly{% endblock %}
+{% block title %}Terms and Conditions — Waffle Wallet{% endblock %}
 
 {% block content %}
 
 <section class="legal-section">
-    <div class="legal-container">
+    <div class="legal-wrap">
 
-        <h1 class="legal-title">Terms and Conditions</h1>
-        <p class="legal-updated">Last updated: October 2026</p>
+        <header class="legal-header">
+            <p class="legal-eyebrow">The fine print</p>
+            <h1 class="legal-title">Terms and Conditions</h1>
+            <p class="legal-updated">Last updated: October 2026</p>
+        </header>
 
-        <h2>1. Acceptance of Terms</h2>
-        <p>
-            By creating an account or using Spendly, you agree to be bound by these
-            Terms and Conditions. If you do not agree, please do not use the service.
-        </p>
+        <div class="legal-layout">
+            <nav class="legal-toc" aria-label="On this page">
+                <p class="legal-toc-title">On this page</p>
+                <ol>
+                    <li><a href="#acceptance">Acceptance of Terms</a></li>
+                    <li><a href="#use">Use of Service</a></li>
+                    <li><a href="#data">User Data</a></li>
+                    <li><a href="#liability">Limitations of Liability</a></li>
+                    <li><a href="#changes">Changes to Terms</a></li>
+                </ol>
+            </nav>
 
-        <h2>2. Use of Service</h2>
-        <p>
-            Spendly is a personal expense tracking tool. You agree to use it only for
-            lawful purposes and to provide accurate account information. You are
-            responsible for keeping your login credentials secure and for all activity
-            that happens under your account. You must not attempt to disrupt the
-            service or access data that belongs to other users.
-        </p>
+            <article class="legal-card">
+                <section id="acceptance">
+                    <h2>1. Acceptance of Terms</h2>
+                    <p>
+                        By creating an account or using Waffle Wallet, you agree to be bound by
+                        these Terms and Conditions. We kept them short, since nobody enjoys long
+                        ones. If you do not agree, please do not use the service.
+                    </p>
+                </section>
 
-        <h2>3. User Data</h2>
-        <p>
-            You retain ownership of the expense data you enter into Spendly. We store
-            this data only to provide the service to you, and we do not sell it to
-            third parties. You may edit or delete your expenses at any time.
-        </p>
+                <section id="use">
+                    <h2>2. Use of Service</h2>
+                    <p>
+                        Waffle Wallet is a personal expense tracking tool. You agree to use it
+                        only for lawful purposes and to provide accurate account information.
+                        You are responsible for keeping your login credentials secure and for all
+                        activity that happens under your account. You must not attempt to disrupt
+                        the service or access data that belongs to other users.
+                    </p>
+                </section>
 
-        <h2>4. Limitations of Liability</h2>
-        <p>
-            Spendly is provided "as is" without warranties of any kind. It is a
-            tracking tool and does not provide financial, tax, or legal advice. To the
-            fullest extent permitted by law, we are not liable for any loss or damage
-            arising from your use of the service, including inaccurate data or service
-            interruptions.
-        </p>
+                <section id="data">
+                    <h2>3. User Data</h2>
+                    <p>
+                        You retain ownership of the expense data you enter into Waffle Wallet. We
+                        store this data only to provide the service to you, and we do not sell it
+                        to third parties. You may edit or delete your expenses at any time.
+                    </p>
+                </section>
 
-        <h2>5. Changes to Terms</h2>
-        <p>
-            We may update these Terms from time to time. When we do, we will revise the
-            "Last updated" date above. Continued use of Spendly after changes take
-            effect means you accept the revised Terms.
-        </p>
+                <section id="liability">
+                    <h2>4. Limitations of Liability</h2>
+                    <p>
+                        Waffle Wallet is provided "as is" without warranties of any kind. It is a
+                        tracking tool and does not provide financial, tax, or legal advice. To the
+                        fullest extent permitted by law, we are not liable for any loss or damage
+                        arising from your use of the service, including inaccurate data or service
+                        interruptions.
+                    </p>
+                </section>
+
+                <section id="changes">
+                    <h2>5. Changes to Terms</h2>
+                    <p>
+                        We may update these Terms from time to time. When we do, we will revise
+                        the "Last updated" date above. Continued use of Waffle Wallet after
+                        changes take effect means you accept the revised Terms.
+                    </p>
+                </section>
+            </article>
+        </div>
 
     </div>
 </section>
