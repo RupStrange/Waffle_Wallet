@@ -64,9 +64,14 @@ git checkout -b <branch_name>
 
 Read these files before writing the spec:
 
-- `CLAUDE.md` — roadmap, conventions, schema
-- `app.py` — existing routes and structure
-- `database/db.py` — existing schema and functions
+- `CLAUDE.md` — roadmap, conventions, architecture rules
+- `main.py` — app factory, registered routers, stub routes
+- `dependencies.py` — shared Jinja2Templates and get_db()
+- `database/database.py` — SQLAlchemy engine, SessionLocal, Base
+- `database/db.py` — init_db() and seed_db() implementations
+- `models/user.py` and `models/expense.py` — ORM model definitions
+- `schemas/user.py` and `schemas/expense.py` — Pydantic schemas
+- `routers/pages.py` and `routers/expenses.py` — existing routes
 - All files in `.claude/specs/` — avoid duplicating existing specs
 
 Check `CLAUDE.md` to confirm the requested step is not already
@@ -124,11 +129,18 @@ Any new pip packages. If none: state "No new dependencies".
 
 Specific constraints Claude must follow. Always include:
 
-- No SQLAlchemy or ORMs
-- Parameterised queries only
-- Passwords hashed with werkzeug
+- SQLAlchemy ORM only — no raw SQL, no f-strings in queries
+- Parameterised ORM expressions only
+- Passwords hashed with `passlib.context.CryptContext(schemes=["bcrypt"])`
+- Never store or log plaintext passwords
 - Use CSS variables — never hardcode hex values
 - All templates extend `base.html`
+- New routes go in a new file under `routers/` — never inline in `main.py`
+- DB queries go in `crud/` — never inside route functions or services
+- Business logic goes in `services/` — not inside routers
+- Always name routes with `name=` in the decorator so `url_for` resolves them
+- Always use `url_for()` for internal links — never hardcode URLs in templates
+- Raise `HTTPException` for HTTP errors — never return bare strings
 
 ## Definition of done
 
