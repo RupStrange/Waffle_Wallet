@@ -14,9 +14,10 @@
 
     <header class="ww-nav">
         <div class="ww-nav-inner">
-            <a href="{{ url_for('landing') }}" class="ww-brand" aria-label="Waffle Wallet home" title="Waffle Wallet. Because &quot;it's fine&quot; isn't a budget.">
+            <a href="{{ url_for('landing') }}" class="ww-brand" aria-label="Waffle Wallet home" title="Waffle Wallet — personal finance, simplified.">
                 {% include "_logo.html" %}
                 Waffle Wallet
+                <span class="ww-brand-by">by Dessert</span>
             </a>
             <nav class="ww-nav-links" aria-label="Primary">{% block nav_links %}{% endblock %}</nav>
             <div class="ww-nav-actions">
@@ -36,12 +37,32 @@
                 {% include "_logo.html" %}
                 <div>
                     <div class="footer-name">Waffle Wallet</div>
-                    <p class="footer-copy">Track every rupee. Inflation certainly does.</p>
+                    <p class="footer-copy">Clear, honest personal finance tracking — built for everyday use.</p>
+                    <p class="footer-brand-credit">A <strong>Dessert</strong> product</p>
                 </div>
             </div>
-            <div class="footer-links">
-                <a href="{{ url_for('terms') }}">Terms and Conditions</a>
-                <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+
+            <div class="footer-col">
+                <p class="footer-nav-label">Navigate</p>
+                <div class="footer-links" style="flex-direction: column; gap: 0.55rem;">
+                    <a href="{{ url_for('terms') }}">Terms and Conditions</a>
+                    <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <p class="footer-nav-label">Our commitments</p>
+                <div class="footer-pills">
+                    <span class="footer-pill is-lilac">No subscription</span>
+                    <span class="footer-pill is-lilac">No ads. Ever.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-inner">
+                <span>© 2026 Waffle Wallet · A <strong style="color:#E77C61;font-weight:700;">Dessert</strong> product</span>
+                <span>Designed and built in India</span>
             </div>
         </div>
     </footer>

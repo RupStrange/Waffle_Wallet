@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Waffle Wallet — Where did it all go?{% endblock %}
+{% block title %}Waffle Wallet — Intelligent Expense Tracking{% endblock %}
 
 {% block nav_links %}
 <a href="#features">Features</a>
@@ -12,48 +12,48 @@
     <div class="ww-hero-inner">
 
         <div class="ww-hero-copy">
-            <div class="ww-badge"><i></i>Free. Your wallet has suffered enough.</div>
+            <div class="ww-badge"><i></i>Simple, powerful personal finance</div>
 
             <h1 class="ww-title">
-                Your money keeps vanishing.
-                <em>We'll find the body.</em>
+                Complete visibility into
+                <em>every rupee you spend.</em>
             </h1>
 
             <p class="ww-subtitle">
-                Waffle Wallet logs every rupee and shows you where it went. No
-                detective, therapist or spreadsheet required.
+                Waffle Wallet helps you log expenses in seconds, identify spending
+                patterns, and make informed financial decisions — all in one clean dashboard.
             </p>
 
             <div class="ww-actions">
                 <a href="{{ url_for('register') }}" class="ww-btn ww-btn-lg">Get started</a>
-                <a href="#features" class="ww-btn ww-btn-lg ww-btn-ghost">See features</a>
+                <a href="#features" class="ww-btn ww-btn-lg ww-btn-ghost">Explore features</a>
             </div>
 
             <ul class="ww-assurance">
-                <li>No ads. Ever.</li>
-                <li>Zero lectures</li>
-                <li>One-minute setup. Recovery not included.</li>
+                <li>No credit card required</li>
+                <li>Ready in under two minutes</li>
+                <li>Your data is always private</li>
             </ul>
         </div>
 
         <div class="ww-dash" role="group" aria-label="Sample Waffle Wallet dashboard"
-             title="Sample data, not yours. Nothing here is your fault yet.">
+             title="Sample data for illustration purposes.">
             <div class="ww-dash-head">
-                <span>The month in review</span>
+                <span>Monthly overview</span>
                 <span>October 2026</span>
             </div>
 
             <div class="ww-panel ww-balance">
-                <h3>Budget left (so far)</h3>
+                <h3>Remaining budget</h3>
                 <div class="ww-balance-top">
                     <div class="ww-amount">₹6,760</div>
-                    <span class="ww-tag" title="Medically speaking, that counts as healthy.">Still breathing</span>
+                    <span class="ww-tag">On track</span>
                 </div>
                 <div class="ww-meter" role="img" aria-label="73% of the monthly budget used">
                     <span style="width: 73%"></span>
                 </div>
                 <div class="ww-balance-foot">
-                    <span>₹18,240 spent of ₹25,000</span>
+                    <span>₹18,240 of ₹25,000 spent</span>
                     <span>Income ₹43,000</span>
                 </div>
             </div>
@@ -61,8 +61,8 @@
             <div class="ww-panel-split">
                 <div class="ww-panel">
                     <div class="ww-trend-head">
-                        <h3>Spending, month by month</h3>
-                        <span class="ww-delta" title="Up 12% since September. The coffee knows what it did.">+12% vs Sep</span>
+                        <h3>Monthly spending trend</h3>
+                        <span class="ww-delta">+12% vs Sep</span>
                     </div>
                     <div class="ww-columns" role="img"
                          aria-label="Spending by month, May to October. October is ₹18,240, up 12% on September.">
@@ -76,7 +76,7 @@
                 </div>
 
                 <div class="ww-panel">
-                    <h3>Where it vanished</h3>
+                    <h3>Spending by category</h3>
                     <div class="ww-split-bar" role="img"
                          aria-label="Food 38%, Bills 25%, Travel 20%, Shopping 17%">
                         <span class="ww-c-food" style="width: 38%"></span>
@@ -94,12 +94,12 @@
             </div>
 
             <div class="ww-panel">
-                <h3>Recent evidence</h3>
+                <h3>Recent transactions</h3>
                 <ul class="ww-txns">
                     <li class="ww-txn">
                         <span class="ww-txn-dot ww-c-food" aria-hidden="true">F</span>
                         <div class="ww-txn-main">
-                            <div class="ww-txn-name">Groceries + "just one" snack</div>
+                            <div class="ww-txn-name">Weekly grocery run</div>
                             <div class="ww-txn-meta">Food · Today</div>
                         </div>
                         <span class="ww-txn-amt">−₹1,486</span>
@@ -107,7 +107,7 @@
                     <li class="ww-txn">
                         <span class="ww-txn-dot ww-c-travel" aria-hidden="true">T</span>
                         <div class="ww-txn-main">
-                            <div class="ww-txn-name">Metro recharge (the responsible one)</div>
+                            <div class="ww-txn-name">Metro card top-up</div>
                             <div class="ww-txn-meta">Travel · Yesterday</div>
                         </div>
                         <span class="ww-txn-amt">−₹500</span>
@@ -115,7 +115,7 @@
                     <li class="ww-txn">
                         <span class="ww-txn-dot ww-c-bills" aria-hidden="true">B</span>
                         <div class="ww-txn-main">
-                            <div class="ww-txn-name">Electricity (the AC won)</div>
+                            <div class="ww-txn-name">Electricity bill — October</div>
                             <div class="ww-txn-meta">Bills · 14 Oct</div>
                         </div>
                         <span class="ww-txn-amt">−₹1,820</span>
@@ -123,7 +123,7 @@
                     <li class="ww-txn">
                         <span class="ww-txn-dot ww-c-income" aria-hidden="true">+</span>
                         <div class="ww-txn-main">
-                            <div class="ww-txn-name">Salary (hello, goodbye)</div>
+                            <div class="ww-txn-name">Monthly salary</div>
                             <div class="ww-txn-meta">Income · 1 Oct</div>
                         </div>
                         <span class="ww-txn-amt is-in">+₹43,000</span>
@@ -138,35 +138,55 @@
 <section class="ww-features" id="features">
     <div class="ww-container">
         <div class="ww-section-head">
-            <p class="ww-eyebrow">The good stuff</p>
-            <h2 class="ww-h2">Everything you need to stop asking "where did it go?"</h2>
+            <p class="ww-eyebrow">Core features</p>
+            <h2 class="ww-h2">Everything you need to track, analyse, and optimise your spending.</h2>
         </div>
 
         <div class="ww-feature-grid">
             <article class="ww-feature">
                 <div class="ww-feature-icon" aria-hidden="true">₹</div>
-                <h3>Log it in seconds</h3>
-                <p>Amount, category, date. Quicker than explaining the purchase to anyone who asks.</p>
+                <h3>Instant expense logging</h3>
+                <p>Add any expense in under ten seconds — amount, category, and an optional note. Clean, minimal, and designed to remove every reason to skip logging.</p>
             </article>
             <article class="ww-feature">
                 <div class="ww-feature-icon" aria-hidden="true">◎</div>
-                <h3>Spot the pattern</h3>
-                <p>Charts that notice what the month would rather hide: the subscription nobody remembers, the "quick" orders that stopped being quick.</p>
+                <h3>Visual spending insights</h3>
+                <p>Monthly charts and category breakdowns show exactly where your money goes. Identify recurring costs, peak spending weeks, and areas to cut — at a glance.</p>
             </article>
             <article class="ww-feature">
                 <div class="ww-feature-icon" aria-hidden="true">◷</div>
-                <h3>Time travel, sort of</h3>
-                <p>Filter by week, month or any date range. You can look back. You can't change the past. We checked.</p>
+                <h3>Flexible date filters</h3>
+                <p>View your data by week, month, or any custom range. Analyse past periods, track progress toward budget goals, and build an accurate picture of your habits over time.</p>
             </article>
+        </div>
+    </div>
+</section>
+
+<section class="ww-stats-strip">
+    <div class="ww-stats-inner">
+        <div class="ww-stat">
+            <span class="ww-stat-badge is-coral">Setup</span>
+            <div class="ww-stat-num">2 min</div>
+            <p class="ww-stat-label">Average time from sign-up to your first logged expense.</p>
+        </div>
+        <div class="ww-stat">
+            <span class="ww-stat-badge is-coral">Cost</span>
+            <div class="ww-stat-num">₹0</div>
+            <p class="ww-stat-label">No subscription tiers, no paywalls, no upgrade prompts. Full access, always.</p>
+        </div>
+        <div class="ww-stat">
+            <span class="ww-stat-badge is-coral">Ads</span>
+            <div class="ww-stat-num">Zero</div>
+            <p class="ww-stat-label">No advertisements, no data brokers, no dark patterns. Your data is yours alone.</p>
         </div>
     </div>
 </section>
 
 <section class="ww-cta" id="get-started">
     <div class="ww-cta-panel">
-        <h2>Ready to face the numbers?</h2>
-        <p>Your money has been making decisions without you. Join the meeting. It's free.</p>
-        <a href="{{ url_for('register') }}" class="ww-btn ww-btn-lg ww-btn-light">Create free account</a>
+        <h2>Take control of your finances today.</h2>
+        <p>Join thousands of people who use Waffle Wallet to understand their spending, reduce waste, and make better financial decisions every month.</p>
+        <a href="{{ url_for('register') }}" class="ww-btn ww-btn-lg ww-btn-light">Create your free account</a>
     </div>
 </section>
 
