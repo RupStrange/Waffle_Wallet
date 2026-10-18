@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -6,12 +8,22 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from core.config import get_settings
 from dependencies import templates
 from routers import pages, expenses
+from database.db import init_db, seed_db
 
 settings = get_settings()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_db()
+    seed_db()
+    yield
+
 
 app = FastAPI(
     title=settings.app_name,
     debug=settings.debug,
+    lifespan=lifespan,
 )
 
 # --- Static files ---------------------------------------------------------- #
