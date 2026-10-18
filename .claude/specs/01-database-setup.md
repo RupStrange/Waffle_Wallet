@@ -140,7 +140,7 @@ Populate the database with initial demonstration data.
 **Demo user**
 
 - Name: `Demo User`
-- Email: `demo@spendly.com`
+- Email: `demo@wafflewallet.com`
 - Password: `demo123`
 
 Requirements:
