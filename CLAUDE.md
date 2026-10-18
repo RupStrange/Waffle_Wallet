@@ -58,7 +58,8 @@ expense-tracker/
 ## Tech constraints
 
 - **FastAPI only** — no Flask, no Django, no other web frameworks
-- **SQLite only** — no PostgreSQL, no SQLAlchemy ORM, no external DB
+- **PostgreSQL + SQLAlchemy** — psycopg3 driver (`psycopg[binary]`), synchronous ORM, `DeclarativeBase` style
+- **No raw SQL** — use SQLAlchemy ORM and parameterised expressions only
 - **Vanilla JS only** — no React, no jQuery, no npm packages
 - **No new pip packages** — work within `requirements.txt` as-is unless explicitly told otherwise
 - Python 3.10+ assumed — f-strings and `match` statements are fine
@@ -129,7 +130,6 @@ pytest -s
 - **Never install new packages** mid-feature without flagging it — keep `requirements.txt` in sync
 - **Never use JS frameworks** — the frontend is intentionally vanilla
 - **`database.py` is currently a documented stub** — do not assume `get_db()`, `init_db()`, or `seed_db()` exist until Step 1 implements them
-- **FK enforcement is manual** — SQLite foreign keys are off by default; `get_db()` must run `PRAGMA foreign_keys = ON` on every connection
 - **`url_for` shim in `main.py`** — templates use Flask-style `url_for('name')` calls; the shim in `main.py` translates these to Starlette's `app.url_path_for()`. Never remove it, and always name new routes with `name=` in the router decorator
 - The app runs on **port 5001**, not the FastAPI default 8000 — don't change this
 - The shared `Jinja2Templates` instance lives in `dependencies.py` — always import it from there, never create a second instance
