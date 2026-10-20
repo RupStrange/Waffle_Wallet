@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from starlette.middleware.sessions import SessionMiddleware
 
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
@@ -7,8 +8,8 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from core.config import get_settings
 from dependencies import templates
-from routers import pages, expenses
 from database.db import init_db, seed_db
+from routers import pages, expenses, auth
 
 settings = get_settings()
 
@@ -42,18 +43,17 @@ def _url_for(name: str, **kwargs) -> str:
 
 templates.env.globals["url_for"] = _url_for
 
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=settings.secret_key,
+    same_site="lax",
+    https_only=False
+)
+
 # --- Routers --------------------------------------------------------------- #
 app.include_router(pages.router)
 app.include_router(expenses.router)
-
-# Placeholder routes preserved from the Flask original
-@app.get("/logout", name="logout", response_class=HTMLResponse)
-async def logout():
-    return "Logout — coming in Step 3"
-
-@app.get("/profile", name="profile", response_class=HTMLResponse)
-async def profile():
-    return "Profile page — coming in Step 4"
+app.include_router(auth.router)
 
 # --- Error handlers -------------------------------------------------------- #
 @app.exception_handler(StarletteHTTPException)

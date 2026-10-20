@@ -20,7 +20,7 @@
                     <input type="text" id="name" name="name"
                            class="form-input" placeholder="What should we call you?"
                            value="{{ form.name if form else '' }}"
-                           autocomplete="name" autofocus>
+                           autocomplete="name" {% if not errors %}autofocus{% endif %}>
                     {% if errors and errors.name %}
                     <span class="form-error">{{ errors.name }}</span>
                     {% endif %}
@@ -67,4 +67,19 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block scripts %}
+{% if errors %}
+<script>
+  const firstError = document.querySelector('.form-error');
+  if (firstError) {
+    const field = firstError.closest('.form-group')?.querySelector('.form-input');
+    if (field) {
+      field.focus();
+      field.scrollIntoView({behavior: 'smooth', block: 'center'});
+    }
+  }
+</script>
+{% endif %}
 {% endblock %}

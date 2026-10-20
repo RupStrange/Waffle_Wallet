@@ -21,8 +21,12 @@
             </a>
             <nav class="ww-nav-links" aria-label="Primary">{% block nav_links %}{% endblock %}</nav>
             <div class="ww-nav-actions">
+                {% if request.session.get('email') %}
+                <a href="{{ url_for('logout') }}" class="ww-btn">Sign out</a>
+                {% else %}
                 <a href="{{ url_for('login') }}" class="ww-signin">Sign in</a>
                 <a href="{{ url_for('register') }}" class="ww-btn">Sign up</a>
+                {% endif %}
             </div>
         </div>
     </header>
