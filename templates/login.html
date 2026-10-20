@@ -14,22 +14,29 @@
         </div>
 
         <div class="auth-card">
-            {% if error %}
-            <div class="auth-error" role="alert">{{ error }}</div>
+            {% if errors and errors.general %}
+            <div class="auth-error" role="alert">{{ errors.general }}</div>
             {% endif %}
 
-            <form method="POST" action="{{ url_for('login') }}">
+            <form method="POST" action="{{ url_for('login_post') }}">
                 <div class="form-group">
                     <label for="email">Email address</label>
                     <input type="email" id="email" name="email"
                            class="form-input" placeholder="you@example.com"
-                           autocomplete="email" required autofocus>
+                           value="{{ form.email if form else '' }}"
+                           autocomplete="email" required {% if not errors %}autofocus{% endif %}>
+                    {% if errors and errors.email %}
+                    <span class="form-error">{{ errors.email }}</span>
+                    {% endif %}
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password"
                            class="form-input" placeholder="Your password"
                            autocomplete="current-password" required>
+                    {% if errors and errors.password %}
+                    <span class="form-error">{{ errors.password }}</span>
+                    {% endif %}
                 </div>
                 <button type="submit" class="btn-submit">Sign in</button>
             </form>
@@ -45,4 +52,12 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block scripts %}
+{% if errors %}
+<script>
+  document.querySelector('.auth-error, .form-error')?.scrollIntoView({behavior: 'smooth', block: 'center'});
+</script>
+{% endif %}
 {% endblock %}

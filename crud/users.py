@@ -9,6 +9,7 @@ def get_user_by_email(db: Session, email: str) -> User | None:
     return db.scalars(stmt).first()
 
 
+
 def create_user(db: Session, name: str, email: str, password_hash: str) -> User:
     user = User(name=name, email=email, password_hash=password_hash)
     db.add(user)

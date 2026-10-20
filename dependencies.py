@@ -8,6 +8,7 @@ see the fully-initialised url_for helper — no circular import required.
 """
 from typing import Generator
 
+from fastapi import Depends, HTTPException, Request
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
@@ -22,3 +23,14 @@ def get_db() -> Generator[Session, None, None]:
         yield db
     finally:
         db.close()
+
+
+def get_current_user(request: Request, db: Session = Depends(get_db)):
+    email = request.session.get("email")
+    if not email:
+        raise HTTPException(status_code=401)
+    from crud.users import get_user_by_email
+    user = get_user_by_email(db, email)
+    if not user:
+        raise HTTPException(status_code=401)
+    return user
