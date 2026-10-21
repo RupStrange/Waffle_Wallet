@@ -131,7 +131,7 @@ Requirements:
 - Handle initialisation failures with clear diagnostic information.
 - Do not perform database initialisation on every API request.
 
-Use Alembic for future schema migrations.
+Use Alembic for future schema migrations. (Adopted — see `alembic/` and the migration workflow in `CLAUDE.md`.)
 
 ### C. `seed_db()`
 
