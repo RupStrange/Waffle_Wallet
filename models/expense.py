@@ -7,13 +7,17 @@ from database import Base
 
 VALID_CATEGORIES = ("Food", "Transport", "Bills", "Health", "Entertainment", "Shopping", "Other")
 
+# SQL literal list derived from VALID_CATEGORIES, e.g. "'Food','Transport',..."
+# Keeps the CHECK constraint in lockstep with the tuple above.
+_CATEGORY_SQL_LIST = ",".join(f"'{c}'" for c in VALID_CATEGORIES)
+
 
 class Expense(Base):
     __tablename__ = "expenses"
     __table_args__ = (
         CheckConstraint("amount > 0", name="ck_expenses_amount_positive"),
         CheckConstraint(
-            "category IN ('Food','Transport','Bills','Health','Entertainment','Shopping','Other')",
+            f"category IN ({_CATEGORY_SQL_LIST})",
             name="ck_expenses_category_valid",
         ),
         Index("ix_expenses_user_id_date", "user_id", "date"),

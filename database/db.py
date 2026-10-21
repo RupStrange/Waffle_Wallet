@@ -11,7 +11,14 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def init_db() -> None:
-    """Create all tables. Safe to call on every startup."""
+    """Create all tables directly from the models, bypassing Alembic.
+
+    NOT called at startup any more -- Alembic owns the schema. Kept only for
+    building a scratch/test database from scratch. Never run this against the
+    real database: create_all() adds missing TABLES only, so a DB built this way
+    silently diverges from one built by `alembic upgrade head` the moment a
+    migration adds a column or index.
+    """
     try:
         Base.metadata.create_all(bind=engine)
         print("[init_db] Tables created / verified.")

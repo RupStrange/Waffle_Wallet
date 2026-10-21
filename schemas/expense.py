@@ -3,10 +3,11 @@ from decimal import Decimal
 from typing import Literal
 from pydantic import BaseModel, Field, model_validator
 
-CATEGORY_TYPE = Literal[
-    "Food", "Transport", "Bills", "Health",
-    "Entertainment", "Shopping", "Other"
-]
+from models.expense import VALID_CATEGORIES
+
+# Single source of truth is models.expense.VALID_CATEGORIES. Type checkers
+# cannot evaluate a non-literal here; Pydantic resolves it fine at runtime.
+CATEGORY_TYPE = Literal[VALID_CATEGORIES]  # type: ignore[valid-type]
 
 SORT_TYPE = Literal["date-desc", "date-asc", "amt-desc", "amt-asc"]
 

@@ -1,22 +1,25 @@
 from contextlib import asynccontextmanager
 from starlette.middleware.sessions import SessionMiddleware
 
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from core.config import get_settings
 from dependencies import templates
-from database.db import init_db, seed_db
+from database.db import seed_db
+from errors import register_exception_handlers
 from routers import pages, expenses, auth, profile
+from routers import api_expenses
 
 settings = get_settings()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    init_db()
+    # Schema is owned by Alembic -- run `alembic upgrade head` by hand after
+    # pulling new migrations. Deliberately NOT run here: migrations are a deploy
+    # step, and auto-running them means every --reload restart takes DDL locks
+    # and multiple workers race the same revision.
     seed_db()
     yield
 
@@ -26,6 +29,8 @@ app = FastAPI(
     debug=settings.debug,
     lifespan=lifespan,
 )
+
+register_exception_handlers(app)
 
 # --- Static files ---------------------------------------------------------- #
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -55,16 +60,7 @@ app.include_router(pages.router)
 app.include_router(expenses.router)
 app.include_router(auth.router)
 app.include_router(profile.router)
-
-# --- Error handlers -------------------------------------------------------- #
-@app.exception_handler(StarletteHTTPException)
-async def http_exception_handler(request: Request, exc: StarletteHTTPException):
-    if exc.status_code == 404:
-        return templates.TemplateResponse(
-            "404.html", {"request": request}, status_code=404
-        )
-    from fastapi.responses import PlainTextResponse
-    return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
+app.include_router(api_expenses.router)
 
 
 if __name__ == "__main__":
