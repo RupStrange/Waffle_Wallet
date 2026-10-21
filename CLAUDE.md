@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-Waffle Wallet is a lightweight personal expense tracker built with FastAPI and SQLite.
+Waffle Wallet is a lightweight personal expense tracker built with FastAPI, SQLAlchemy 2.0 and PostgreSQL.
 
 ---
 
@@ -12,17 +12,21 @@ Waffle Wallet is a lightweight personal expense tracker built with FastAPI and S
 ```
 expense-tracker/
 ├── main.py             # App factory — mounts static, registers routers, url_for shim, 404 handler
-├── dependencies.py     # Shared Jinja2Templates singleton imported by all routers
-├── database.py         # SQLite helpers: get_db(), init_db(), seed_db()  ← student Step 1
+├── dependencies.py     # Shared Jinja2Templates singleton, get_db(), get_current_user()
+├── database/
+│   ├── database.py     # engine, SessionLocal, Base (DeclarativeBase)
+│   └── db.py           # init_db(), seed_db(), shared pwd_context
 ├── core/
 │   └── config.py       # Settings class backed by env vars, accessed via get_settings()
 ├── routers/
-│   ├── pages.py        # GET routes that render Jinja2 templates
+│   ├── pages.py        # GET routes that render Jinja2 templates + POST /register
+│   ├── auth.py         # POST /login, GET /logout
+│   ├── profile.py      # Dashboard / account / preferences pages
 │   └── expenses.py     # Expense CRUD routes (stubs; students implement Steps 7–9)
-├── models/             # SQLAlchemy-style model classes — empty until needed
-├── schemas/            # Pydantic request/response schemas — empty until needed
-├── services/           # Business logic — empty until needed
-├── crud/               # DB query functions — empty until needed
+├── models/             # SQLAlchemy models: user.py (User), expense.py (Expense)
+├── schemas/            # Pydantic schemas: user.py, expense.py
+├── services/           # Business logic: authentication.py, registration.py
+├── crud/               # DB query functions: users.py
 ├── templates/
 │   ├── base.html       # Shared layout — all templates must extend this
 │   └── *.html          # One template per page
@@ -37,7 +41,8 @@ expense-tracker/
 
 **Where things belong:**
 - New routes → new file under `routers/`, never inline in `main.py`
-- DB logic → `database.py` only, never inline in route functions
+- DB queries → `crud/` only, never inline in route functions or services
+- Engine/session/schema bootstrap → `database/`, never queries
 - New pages → new `.html` file extending `base.html`
 - Page-specific styles → new `.css` file, not inline `<style>` tags
 - Business logic → `services/`, not inside routers
@@ -50,7 +55,9 @@ expense-tracker/
 - Python: PEP 8, snake_case for all variables and functions
 - Templates: Jinja2 with `url_for()` for every internal link — never hardcode URLs
 - Route functions: one responsibility only — call a service/crud, return a response
-- DB queries: always use parameterized queries (`?` placeholders) — never f-strings in SQL
+- DB queries: no raw SQL — use SQLAlchemy ORM expressions (`select()`, `.where()`). SQLAlchemy
+  parameterises **values** automatically, but **never** interpolate column names, table names or
+  sort direction into SQL text — map user input through a hardcoded allowlist dict instead
 - Error handling: raise `HTTPException` for HTTP errors, not bare string returns
 
 ---
@@ -109,13 +116,15 @@ pytest -s
 |---|---|
 | `GET /` | Implemented — renders `landing.html` |
 | `GET /register` | Implemented — renders `register.html` |
+| `POST /register` | Implemented — in `routers/pages.py` |
 | `GET /login` | Implemented — renders `login.html` |
+| `POST /login` | Implemented — in `routers/auth.py` |
 | `GET /terms` | Implemented — renders `terms.html` |
 | `GET /privacy` | Implemented — renders `privacy.html` |
-| `GET /logout` | Stub — Step 3 |
-| `GET /profile` | Implemented — renders `profile.html` (dashboard; static placeholder data) |
-| `GET /account` | Implemented — renders `account.html` (static placeholder data) |
-| `GET /preferences` | Implemented — renders `preferences.html` (static placeholder data) |
+| `GET /logout` | Implemented — clears session, redirects to `/` |
+| `GET /profile` | Implemented — renders `profile.html` (dashboard) — static placeholder data, no auth guard yet (known gap) |
+| `GET /account` | Implemented — renders `account.html` — static placeholder data, no auth guard yet (known gap) |
+| `GET /preferences` | Implemented — renders `preferences.html` — static placeholder data, no auth guard yet (known gap) |
 | `GET /expenses/add` | Stub — Step 7 |
 | `GET /expenses/{id}/edit` | Stub — Step 8 |
 | `GET /expenses/{id}/delete` | Stub — Step 9 |
@@ -128,10 +137,19 @@ pytest -s
 
 - **Never use plain string returns for stub routes** once a step is implemented — always render a template
 - **Never hardcode URLs** in templates — always use `url_for()`
-- **Never put DB logic in route functions** — it belongs in `database.py` or `crud/`
+- **Never put DB logic in route functions** — it belongs in `crud/` or `database/`
 - **Never install new packages** mid-feature without flagging it — keep `requirements.txt` in sync
 - **Never use JS frameworks** — the frontend is intentionally vanilla
-- **`database.py` is currently a documented stub** — do not assume `get_db()`, `init_db()`, or `seed_db()` exist until Step 1 implements them
+- **No migration tool** — there is no Alembic. `Base.metadata.create_all()` creates *missing tables
+  only*; it will never add a column or index to a table that already exists, and it fails silently.
+  Schema changes to an existing DB need a manual SQL statement
+- **The 7 expense categories are duplicated in 4 places** that must stay in sync: `models/expense.py`
+  (the `VALID_CATEGORIES` tuple *and* the `CheckConstraint` string), `schemas/expense.py`
+  (`CATEGORY_TYPE`), and `templates/profile.html`. Canonical list: `.claude/specs/01-database-setup.md` §9
+- **`main.py`'s exception handler returns HTML/plain text** — any JSON route must be special-cased
+  by path prefix, or its errors reach the client unparseable
+- **Never use `with TestClient(app)`** — the context manager fires the lifespan, which runs
+  `init_db()` + `seed_db()` against the real PostgreSQL database. Use `TestClient(app)` plainly
 - **`url_for` shim in `main.py`** — templates use Flask-style `url_for('name')` calls; the shim in `main.py` translates these to Starlette's `app.url_path_for()`. Never remove it, and always name new routes with `name=` in the router decorator
 - The app runs on **port 5001**, not the FastAPI default 8000 — don't change this
 - The shared `Jinja2Templates` instance lives in `dependencies.py` — always import it from there, never create a second instance

@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from decimal import Decimal
-from sqlalchemy import Integer, Numeric, String, Text, Date, DateTime, ForeignKey, CheckConstraint, func
+from sqlalchemy import Integer, Numeric, String, Text, Date, DateTime, ForeignKey, CheckConstraint, func, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database import Base
@@ -16,6 +16,7 @@ class Expense(Base):
             "category IN ('Food','Transport','Bills','Health','Entertainment','Shopping','Other')",
             name="ck_expenses_category_valid",
         ),
+        Index("ix_expenses_user_id_date", "user_id", "date"),
     )
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
