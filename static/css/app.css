@@ -1,0 +1,661 @@
+/* app.css — the signed-in app shell: sliding sidebar, top bar, tabs, plus the
+   Account and Preferences pages. Loaded by profile.html, account.html and
+   preferences.html; the dashboard loads profile.css on top of this.
+
+   Shared pieces live here (not in profile.css) because three pages use them. */
+
+/* ---------------------------------------------------------------- */
+/* 1. Layout shell                                                  */
+/* ---------------------------------------------------------------- */
+
+.ww-app {
+    position: relative;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 5rem;
+}
+
+.ww-app-main {
+    min-width: 0;
+}
+
+/* Desktop: the sidebar is pinned open and the content sits beside it. */
+@media (min-width: 961px) {
+    .ww-app {
+        display: grid;
+        grid-template-columns: 232px minmax(0, 1fr);
+        gap: 2rem;
+        align-items: start;
+    }
+}
+
+/* ---------------------------------------------------------------- */
+/* 2. Sliding sidebar                                               */
+/* ---------------------------------------------------------------- */
+
+.ww-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    padding: 1.2rem 1rem;
+    background: var(--ww-card);
+    border: 1px solid var(--ww-line);
+    border-radius: 20px;
+}
+
+@media (min-width: 961px) {
+    .ww-sidebar {
+        position: sticky;
+        top: 1.5rem;
+    }
+}
+
+/* Mobile / tablet: off-canvas drawer that slides in from the left. */
+@media (max-width: 960px) {
+    .ww-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 60;
+        width: 268px;
+        max-width: 84vw;
+        height: 100%;
+        border-radius: 0 20px 20px 0;
+        transform: translateX(-100%);
+        transition: transform 0.22s ease;
+        overflow-y: auto;
+    }
+
+    .ww-app.is-nav-open .ww-sidebar {
+        transform: translateX(0);
+    }
+}
+
+.ww-sidebar-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--ww-line);
+}
+
+.ww-sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-width: 0;
+}
+
+.ww-sidebar-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ww-charcoal);
+    overflow-wrap: anywhere;
+}
+
+.ww-sidebar-role {
+    font-size: 0.72rem;
+    color: var(--ww-muted);
+}
+
+.ww-sidebar-close {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: 1px solid var(--ww-line);
+    border-radius: 9px;
+    color: var(--ww-muted);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.ww-sidebar-close:hover {
+    border-color: var(--ww-gold);
+    color: var(--ww-gold);
+}
+
+/* The close button is only meaningful while the drawer is open. */
+@media (min-width: 961px) {
+    .ww-sidebar-close { display: none; }
+}
+
+.ww-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ww-sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 12px;
+    color: var(--ww-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.12s ease, color 0.12s ease;
+}
+
+.ww-sidebar-link:hover,
+.ww-sidebar-link:focus-visible {
+    background: var(--ww-mint);
+    color: var(--ww-gold);
+}
+
+.ww-sidebar-link.is-active {
+    background: var(--ww-forest);
+    color: #211B2C;
+    font-weight: 600;
+}
+
+.ww-sidebar-link.is-quiet {
+    font-size: 0.85rem;
+}
+
+.ww-sidebar-ico {
+    width: 1.1rem;
+    flex: none;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.ww-sidebar-foot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--ww-line);
+}
+
+.ww-sidebar-cta {
+    text-align: center;
+}
+
+/* ---------------------------------------------------------------- */
+/* 3. Burger + overlay                                              */
+/* ---------------------------------------------------------------- */
+
+.ww-app-burger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    width: 42px;
+    height: 42px;
+    padding: 0 10px;
+    align-items: center;
+    justify-content: center;
+    background: var(--ww-card);
+    border: 1px solid var(--ww-line);
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.ww-app-burger span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--ww-charcoal);
+    border-radius: 2px;
+}
+
+.ww-app-burger:hover {
+    border-color: var(--ww-gold);
+}
+
+.ww-app-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    background: rgba(17, 13, 24, 0.6);
+}
+
+@media (max-width: 960px) {
+    .ww-app-burger {
+        display: flex;
+        margin-bottom: 1.1rem;
+    }
+}
+
+/* The overlay only exists while the drawer is open, and never on desktop. */
+@media (min-width: 961px) {
+    .ww-app-overlay { display: none !important; }
+}
+
+/* ---------------------------------------------------------------- */
+/* 4. Account strip at the top of the dashboard                     */
+/* ---------------------------------------------------------------- */
+
+.ww-app-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 0.9rem 1rem;
+    margin-bottom: 1.5rem;
+    background: var(--ww-card);
+    border: 1px solid var(--ww-line);
+    border-radius: 18px;
+}
+
+.ww-app-user {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-width: 0;
+    text-decoration: none;
+    border-radius: 14px;
+}
+
+.ww-app-user:hover .ww-app-user-name,
+.ww-app-user:focus-visible .ww-app-user-name {
+    color: var(--ww-gold);
+}
+
+.ww-app-user-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.ww-app-user-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ww-charcoal);
+    transition: color 0.12s ease;
+}
+
+.ww-app-user-mail {
+    font-size: 0.78rem;
+    color: var(--ww-muted);
+    overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------------- */
+/* 5. Avatar (shared by sidebar, top bar and account page)           */
+/* ---------------------------------------------------------------- */
+
+.ww-pf-avatar {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    flex: none;
+    border-radius: 16px;
+    background: var(--ww-forest);
+    color: #211B2C;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.ww-pf-avatar.is-sm {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+}
+
+.ww-pf-avatar.is-lg {
+    width: 84px;
+    height: 84px;
+    border-radius: 24px;
+    font-size: 2.1rem;
+}
+
+/* ---------------------------------------------------------------- */
+/* 6. Page headings                                                 */
+/* ---------------------------------------------------------------- */
+
+.ww-pf-name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    line-height: 1.1;
+    color: var(--ww-charcoal);
+}
+
+.ww-pf-since {
+    margin: 0.3rem 0 0;
+    font-size: 0.88rem;
+    color: var(--ww-muted);
+}
+
+/* ---------------------------------------------------------------- */
+/* 7. Tabs                                                          */
+/* ---------------------------------------------------------------- */
+
+.ww-tabs {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    margin: 1.5rem 0 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--ww-line);
+}
+
+.ww-tab {
+    padding: 0.6rem 1rem;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    color: var(--ww-muted);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease;
+}
+
+.ww-tab:hover {
+    color: var(--ww-gold);
+}
+
+.ww-tab.is-active {
+    background: var(--ww-forest);
+    color: #211B2C;
+    font-weight: 600;
+}
+
+.ww-tabpanel:focus-visible {
+    outline: 2px solid var(--ww-forest);
+    outline-offset: 4px;
+    border-radius: 12px;
+}
+
+/* ---------------------------------------------------------------- */
+/* 8. Shared field + panel helpers                                  */
+/* ---------------------------------------------------------------- */
+
+.ww-pf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+}
+
+.ww-pf-field label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ww-muted);
+}
+
+.ww-pf-field .form-input {
+    margin: 0;
+}
+
+.ww-pf-note {
+    margin: 0.6rem 0 0;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--ww-muted);
+}
+
+.ww-pf-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.ww-pf-action {
+    padding: 0.7rem 1.2rem;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.ww-pf-action.is-danger {
+    background: var(--ww-danger-bg);
+    border: 1px solid var(--ww-danger);
+    color: var(--ww-danger);
+}
+
+/* ---------------------------------------------------------------- */
+/* 9. Grid (shared by all three pages)                              */
+/* ---------------------------------------------------------------- */
+
+.ww-pf-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.ww-pf-span-4  { grid-column: span 4; }
+.ww-pf-span-6  { grid-column: span 6; }
+.ww-pf-span-8  { grid-column: span 8; }
+.ww-pf-span-12 { grid-column: 1 / -1; }
+
+/* ---------------------------------------------------------------- */
+/* 10. Account page                                                 */
+/* ---------------------------------------------------------------- */
+
+.ww-acct-avatar-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.1rem;
+    margin-top: 0.8rem;
+}
+
+.ww-acct-avatar-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.7rem;
+}
+
+.ww-acct-swatches {
+    display: flex;
+    gap: 0.45rem;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ww-acct-swatch {
+    display: block;
+    width: 26px;
+    height: 26px;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.ww-acct-swatch.is-active {
+    border-color: var(--ww-charcoal);
+}
+
+.ww-acct-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 0.9rem;
+    margin-top: 0.9rem;
+}
+
+.ww-acct-meta {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin: 1.2rem 0 0;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--ww-line);
+}
+
+.ww-acct-meta dt {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ww-muted);
+}
+
+.ww-acct-meta dd {
+    margin: 0.2rem 0 0;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--ww-charcoal);
+}
+
+.ww-acct-danger {
+    border-color: var(--ww-danger);
+}
+
+/* ---------------------------------------------------------------- */
+/* 11. Preferences page                                             */
+/* ---------------------------------------------------------------- */
+
+.ww-prf-fieldset {
+    margin: 0.8rem 0 0;
+    padding: 0;
+    border: 0;
+}
+
+.ww-prf-radios {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.ww-prf-radio {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid var(--ww-line);
+    border-radius: 12px;
+    font-size: 0.85rem;
+    color: var(--ww-charcoal);
+}
+
+.ww-prf-radio em {
+    margin-left: 0.3rem;
+    font-size: 0.72rem;
+    font-style: normal;
+    color: var(--ww-muted);
+}
+
+.ww-prf-toggles {
+    margin: 0.4rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ww-prf-toggle {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--ww-line);
+}
+
+.ww-prf-toggle:last-child {
+    border-bottom: 0;
+}
+
+.ww-prf-toggle-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ww-charcoal);
+}
+
+.ww-prf-toggle .ww-pf-note {
+    margin-top: 0.2rem;
+}
+
+.ww-prf-toggle input[type="checkbox"] {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 0.2rem;
+    accent-color: var(--ww-forest);
+}
+
+/* ---------------------------------------------------------------- */
+/* 12. Disabled affordance                                          */
+/* .ww-btn:hover (style.css:164) turns coral and lifts even when the */
+/* button is disabled, which makes dead controls feel live.          */
+/* ---------------------------------------------------------------- */
+
+.ww-app [disabled],
+.ww-app [aria-disabled="true"] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* The sidebar's own links are never "disabled" — don't dim them. */
+.ww-app .ww-sidebar [disabled] {
+    opacity: 1;
+}
+
+.ww-app .ww-btn[disabled]:hover,
+.ww-app .ww-pf-action[disabled]:hover {
+    transform: none;
+    box-shadow: none;
+    filter: none;
+}
+
+.ww-app .ww-btn-ghost[disabled]:hover {
+    background: transparent;
+    border-color: var(--ww-line);
+    color: inherit;
+}
+
+.ww-app .ww-pf-action.is-danger[disabled]:hover {
+    background: var(--ww-danger-bg);
+    border-color: var(--ww-danger);
+    color: var(--ww-danger);
+}
+
+/* Hidden panels and filtered rows must beat display:flex / display:grid. */
+.ww-app [hidden] {
+    display: none !important;
+}
+
+/* ---------------------------------------------------------------- */
+/* 13. Responsive                                                   */
+/* ---------------------------------------------------------------- */
+
+@media (max-width: 1040px) {
+    .ww-pf-span-4 { grid-column: span 6; }
+    .ww-pf-span-8 { grid-column: 1 / -1; }
+}
+
+@media (max-width: 720px) {
+    .ww-pf-grid > [class*="ww-pf-span"] { grid-column: 1 / -1; }
+    .ww-pf-name { font-size: 2rem; }
+}
+
+@media (max-width: 520px) {
+    .ww-app { padding: 2rem 1rem 3.5rem; }
+    .ww-acct-fields { grid-template-columns: minmax(0, 1fr); }
+    .ww-acct-meta { gap: 1.2rem; }
+    .ww-acct-avatar-row { flex-direction: column; }
+    .ww-pf-actions > .ww-btn,
+    .ww-pf-actions > .ww-pf-action { flex: 1 1 100%; text-align: center; }
+    .ww-tabs { gap: 0.2rem; }
+    .ww-tab { padding: 0.5rem 0.7rem; font-size: 0.82rem; }
+    .ww-pf-avatar.is-lg { width: 64px; height: 64px; font-size: 1.6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ww-sidebar,
+    .ww-sidebar-link,
+    .ww-tab,
+    .ww-app-user-name {
+        transition: none;
+    }
+}

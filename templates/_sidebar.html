@@ -1,0 +1,67 @@
+{#
+  Sliding sidebar, shared by the three signed-in pages.
+
+  Before including this partial, the page must set:
+    - active      one of: dashboard, account, preferences
+    - pf_name     display name
+    - pf_initials avatar initials
+
+  Jinja comments do not nest, so no example tags are written out here.
+#}
+<button type="button" class="ww-app-burger" id="ww-sidebar-toggle"
+        aria-controls="ww-sidebar" aria-expanded="false" aria-label="Open menu">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+</button>
+
+<div class="ww-app-overlay" id="ww-sidebar-overlay" hidden></div>
+
+<nav class="ww-sidebar" id="ww-sidebar" aria-label="Sections">
+    <div class="ww-sidebar-head">
+        <div class="ww-sidebar-user">
+            <div class="ww-pf-avatar is-sm" aria-hidden="true">{{ pf_initials }}</div>
+            <div>
+                <div class="ww-sidebar-name">{{ pf_name }}</div>
+                <div class="ww-sidebar-role">Personal account</div>
+            </div>
+        </div>
+        <button type="button" class="ww-sidebar-close" id="ww-sidebar-close"
+                aria-label="Close menu">&times;</button>
+    </div>
+
+    <ul class="ww-sidebar-nav">
+        <li>
+            <a href="{{ url_for('account') }}"
+               class="ww-sidebar-link{% if active == 'account' %} is-active{% endif %}"
+               {% if active == 'account' %}aria-current="page"{% endif %}>
+                <span class="ww-sidebar-ico" aria-hidden="true">◍</span>
+                Account
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('profile') }}"
+               class="ww-sidebar-link{% if active == 'dashboard' %} is-active{% endif %}"
+               {% if active == 'dashboard' %}aria-current="page"{% endif %}>
+                <span class="ww-sidebar-ico" aria-hidden="true">◎</span>
+                Dashboard
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('preferences') }}"
+               class="ww-sidebar-link{% if active == 'preferences' %} is-active{% endif %}"
+               {% if active == 'preferences' %}aria-current="page"{% endif %}>
+                <span class="ww-sidebar-ico" aria-hidden="true">⚙</span>
+                Preferences
+            </a>
+        </li>
+    </ul>
+
+    <div class="ww-sidebar-foot">
+        <a href="{{ url_for('add_expense') }}" class="ww-btn ww-sidebar-cta">+ Add expense</a>
+        <a href="{{ url_for('logout') }}" class="ww-sidebar-link is-quiet">
+            <span class="ww-sidebar-ico" aria-hidden="true">⏻</span>
+            Sign out
+        </a>
+    </div>
+</nav>

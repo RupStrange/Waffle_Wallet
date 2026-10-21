@@ -1,0 +1,611 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — Waffle Wallet{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block nav_links %}{% endblock %}
+
+{% block content %}
+{#
+  Static page — every figure below is a placeholder. The session is read for
+  display only, with a demo fallback so the page renders when signed out.
+
+  Income, budgets and savings goals have NO database model yet; those numbers
+  are invented for layout purposes. See the handoff note in the spec.
+#}
+{% set pf_name = request.session.get('user_name') or 'Aarav Mehta' %}
+{% set pf_email = request.session.get('email') or 'aarav.mehta@example.com' %}
+{% set pf_initials = 'AM' %}
+{% set active = 'dashboard' %}
+
+<div class="ww-app ww-pf">
+    {% include "_sidebar.html" %}
+
+    <div class="ww-app-main">
+
+        <!-- Account strip ------------------------------------------------ -->
+        <header class="ww-app-top">
+            <a href="{{ url_for('account') }}" class="ww-app-user" aria-label="Open account settings">
+                <span class="ww-pf-avatar" aria-hidden="true">{{ pf_initials }}</span>
+                <span class="ww-app-user-text">
+                    <span class="ww-app-user-name">{{ pf_name }}</span>
+                    <span class="ww-app-user-mail">{{ pf_email }}</span>
+                </span>
+            </a>
+            <div class="ww-app-top-actions">
+                <a href="{{ url_for('add_expense') }}" class="ww-btn">+ Add expense</a>
+            </div>
+        </header>
+
+        <h1 class="ww-pf-name">Dashboard</h1>
+        <p class="ww-pf-since">Waffling since March 2026 · October 2026</p>
+
+        <!-- Tabs --------------------------------------------------------- -->
+        <div class="ww-tabs" role="tablist" aria-label="Dashboard sections">
+            <button type="button" role="tab" id="tab-overview" aria-controls="panel-overview"
+                    aria-selected="true" class="ww-tab is-active">Overview</button>
+            <button type="button" role="tab" id="tab-txns" aria-controls="panel-txns"
+                    aria-selected="false" tabindex="-1" class="ww-tab">Transactions</button>
+            <button type="button" role="tab" id="tab-budgets" aria-controls="panel-budgets"
+                    aria-selected="false" tabindex="-1" class="ww-tab">Budgets</button>
+            <button type="button" role="tab" id="tab-goals" aria-controls="panel-goals"
+                    aria-selected="false" tabindex="-1" class="ww-tab">Savings Goals</button>
+        </div>
+
+        <!-- ============================ OVERVIEW ====================== -->
+        <section id="panel-overview" role="tabpanel" aria-labelledby="tab-overview"
+                 class="ww-tabpanel" tabindex="0">
+
+            <ul class="ww-pf-balance-strip">
+                <li>
+                    <span class="ww-pf-kpi-label">Total balance</span>
+                    <div class="ww-pf-kpi-value">₹24,760</div>
+                    <p class="ww-pf-kpi-foot">Income minus spending, this month</p>
+                </li>
+                <li>
+                    <span class="ww-pf-kpi-label">Income</span>
+                    <div class="ww-pf-kpi-value is-in">₹43,000</div>
+                    <p class="ww-pf-kpi-foot">Salary · 1 Oct</p>
+                </li>
+                <li>
+                    <span class="ww-pf-kpi-label">Expenses</span>
+                    <div class="ww-pf-kpi-value is-out">₹18,240</div>
+                    <p class="ww-pf-kpi-foot">42% of income spent</p>
+                </li>
+            </ul>
+
+            <ul class="ww-pf-kpis">
+                <li class="ww-pf-kpi">
+                    <h2 class="ww-pf-kpi-label">Spent this month</h2>
+                    <div class="ww-pf-kpi-value">₹18,240</div>
+                    <span class="ww-pf-trendchip is-up">+12% vs September</span>
+                </li>
+                <li class="ww-pf-kpi">
+                    <h2 class="ww-pf-kpi-label">Daily average</h2>
+                    <div class="ww-pf-kpi-value">₹912</div>
+                    <p class="ww-pf-kpi-foot">Projected ₹28,272 by 31 Oct</p>
+                </li>
+                <li class="ww-pf-kpi">
+                    <h2 class="ww-pf-kpi-label">Top category</h2>
+                    <div class="ww-pf-kpi-value">Food</div>
+                    <p class="ww-pf-kpi-foot">₹5,840 — 32% of this month</p>
+                </li>
+                <li class="ww-pf-kpi">
+                    <h2 class="ww-pf-kpi-label">Logging streak</h2>
+                    <div class="ww-pf-kpi-value">11 days</div>
+                    <p class="ww-pf-kpi-foot">Best: 23 days</p>
+                </li>
+            </ul>
+
+            <div class="ww-pf-grid">
+
+                <section class="ww-panel ww-balance ww-pf-budget ww-pf-span-4">
+                    <h3>Remaining budget</h3>
+                    <div class="ww-balance-top">
+                        <div class="ww-amount">₹6,760</div>
+                        <span class="ww-tag">Watch it</span>
+                    </div>
+                    <div class="ww-meter" role="img"
+                         aria-label="73% of the ₹25,000 October budget used">
+                        <span style="width: 73%"></span>
+                    </div>
+                    <div class="ww-balance-foot">
+                        <span>₹18,240 of ₹25,000 spent</span>
+                        <span>11 days left</span>
+                    </div>
+                    <p class="ww-pf-hint">
+                        <span class="ww-pf-ai-badge">AI</span>
+                        Waffle AI suggests a ₹17,000 budget for November — your six-month
+                        average is ₹15,853.
+                    </p>
+                </section>
+
+                <section class="ww-panel ww-pf-span-8">
+                    <div class="ww-trend-head">
+                        <h3>Monthly spending trend</h3>
+                        <span class="ww-delta">+12% vs Sep</span>
+                    </div>
+                    <div class="ww-columns" role="img"
+                         aria-label="Monthly spending, May to October 2026: May ₹12,480, June ₹15,310, July ₹13,260, August ₹19,540, September ₹16,290, October ₹18,240.">
+                        <div class="ww-col"><b style="height: 64%"></b>May</div>
+                        <div class="ww-col"><b style="height: 78%"></b>Jun</div>
+                        <div class="ww-col"><b style="height: 68%"></b>Jul</div>
+                        <div class="ww-col"><b style="height: 100%"></b>Aug</div>
+                        <div class="ww-col"><b style="height: 83%"></b>Sep</div>
+                        <div class="ww-col is-now"><b style="height: 93%"></b>Oct</div>
+                    </div>
+                </section>
+
+                <section class="ww-panel ww-pf-span-6">
+                    <h3>Spending by category — October</h3>
+                    <div class="ww-split-bar" role="img"
+                         aria-label="Food 32%, Bills 21.5%, Transport 14.3%, Shopping 12%, Entertainment 8.4%, Health 7.2%, Other 4.6%">
+                        <span class="ww-c-food" style="width: 32%"></span>
+                        <span class="ww-c-bills" style="width: 21%"></span>
+                        <span class="ww-c-transport" style="width: 14%"></span>
+                        <span class="ww-c-shopping" style="width: 12%"></span>
+                        <span class="ww-c-entertainment" style="width: 9%"></span>
+                        <span class="ww-c-health" style="width: 8%"></span>
+                        <span class="ww-c-other" style="width: 4%"></span>
+                    </div>
+                    <ul class="ww-legend ww-pf-cats">
+                        <li><i class="ww-c-food"></i>Food<em>₹5,840</em><span class="ww-pf-cat-pct">32.0%</span></li>
+                        <li><i class="ww-c-bills"></i>Bills<em>₹3,920</em><span class="ww-pf-cat-pct">21.5%</span></li>
+                        <li><i class="ww-c-transport"></i>Transport<em>₹2,610</em><span class="ww-pf-cat-pct">14.3%</span></li>
+                        <li><i class="ww-c-shopping"></i>Shopping<em>₹2,180</em><span class="ww-pf-cat-pct">12.0%</span></li>
+                        <li><i class="ww-c-entertainment"></i>Entertainment<em>₹1,540</em><span class="ww-pf-cat-pct">8.4%</span></li>
+                        <li><i class="ww-c-health"></i>Health<em>₹1,310</em><span class="ww-pf-cat-pct">7.2%</span></li>
+                        <li><i class="ww-c-other"></i>Other<em>₹840</em><span class="ww-pf-cat-pct">4.6%</span></li>
+                    </ul>
+                </section>
+
+                <section class="ww-panel ww-pf-span-6">
+                    <h3>Spending habits</h3>
+                    <ul class="ww-pf-habits">
+                        <li class="ww-pf-habit">
+                            <div class="ww-pf-habit-num">2.1×</div>
+                            <p class="ww-pf-habit-label">Weekends cost more — ₹1,430 a day against ₹690 on a weekday</p>
+                        </li>
+                        <li class="ww-pf-habit">
+                            <div class="ww-pf-habit-num">Saturday</div>
+                            <p class="ww-pf-habit-label">Your busiest spending day, averaging ₹1,610</p>
+                        </li>
+                        <li class="ww-pf-habit">
+                            <div class="ww-pf-habit-num">₹2,650</div>
+                            <p class="ww-pf-habit-label">Biggest single expense — monthly grocery stock-up, 20 Oct</p>
+                        </li>
+                        <li class="ww-pf-habit">
+                            <div class="ww-pf-habit-num">2 up</div>
+                            <p class="ww-pf-habit-label">Food +18% and Entertainment +34% on last month</p>
+                        </li>
+                    </ul>
+                </section>
+
+                <section class="ww-panel ww-pf-ai ww-pf-span-12">
+                    <div class="ww-trend-head">
+                        <h3>Waffle AI</h3>
+                        <span class="ww-pf-ai-badge">AI-generated</span>
+                    </div>
+                    <p class="ww-pf-ai-body">
+                        You're pacing ₹912 a day in October — at that rate you'll finish the
+                        month around ₹28,272, about ₹3,272 past your ₹25,000 budget. Food is
+                        doing most of the damage at ₹5,840, a third of the month and up 18%
+                        on September. Weekends are the pressure point: ₹1,430 on an average
+                        Saturday or Sunday against ₹690 on a weekday.
+                    </p>
+                    <div class="ww-pf-ai-actions">
+                        <button type="button" class="ww-btn ww-btn-ghost" disabled aria-disabled="true"
+                                title="Preview only — AI insights are not wired up yet.">Regenerate</button>
+                        <span class="ww-pf-note">Preview only — not wired up yet.</span>
+                    </div>
+                </section>
+
+            </div>
+        </section>
+
+        <!-- ========================== TRANSACTIONS ==================== -->
+        <section id="panel-txns" role="tabpanel" aria-labelledby="tab-txns"
+                 class="ww-tabpanel" tabindex="0" hidden>
+
+            <div class="ww-pf-grid">
+
+                <section class="ww-panel ww-pf-toolbar ww-pf-span-12" aria-label="Expense tools">
+
+                    <div class="ww-pf-timetravel">
+                        <div class="ww-pf-field">
+                            <label for="pf-date">Date of expense</label>
+                            <input id="pf-date" class="form-input" type="date"
+                                   value="2026-10-20" max="2026-10-20">
+                        </div>
+                        <div class="ww-pf-daychips" role="group" aria-label="Quick date">
+                            <button type="button" class="ww-pf-daychip is-active" data-days="0">Today</button>
+                            <button type="button" class="ww-pf-daychip" data-days="1">Yesterday</button>
+                            <button type="button" class="ww-pf-daychip" data-days="2">2 days ago</button>
+                            <button type="button" class="ww-pf-daychip" data-pick="1">Pick a date</button>
+                        </div>
+                        <p class="ww-pf-note">
+                            Missed a day? Pick any past date — expenses are recorded against
+                            the date you choose, not today.
+                        </p>
+                    </div>
+
+                    <div class="ww-pf-filters">
+                        <div class="ww-pf-field">
+                            <label for="pf-f-q">Search</label>
+                            <input id="pf-f-q" class="form-input" type="search" placeholder="Description…">
+                        </div>
+                        <div class="ww-pf-field">
+                            <label for="pf-f-cat">Category</label>
+                            <select id="pf-f-cat" class="form-input">
+                                <option value="">All categories</option>
+                                <option value="Food">Food</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Bills">Bills</option>
+                                <option value="Health">Health</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="ww-pf-field">
+                            <label for="pf-f-from">From</label>
+                            <input id="pf-f-from" class="form-input" type="date" max="2026-10-20">
+                        </div>
+                        <div class="ww-pf-field">
+                            <label for="pf-f-to">To</label>
+                            <input id="pf-f-to" class="form-input" type="date" max="2026-10-20">
+                        </div>
+                        <div class="ww-pf-field">
+                            <label for="pf-f-sort">Sort</label>
+                            <select id="pf-f-sort" class="form-input">
+                                <option value="date-desc">Newest first</option>
+                                <option value="date-asc">Oldest first</option>
+                                <option value="amt-desc">Highest amount</option>
+                                <option value="amt-asc">Lowest amount</option>
+                            </select>
+                        </div>
+                        <div class="ww-pf-field ww-pf-field-reset">
+                            <button type="button" class="ww-btn ww-btn-ghost ww-pf-filter-reset">Reset</button>
+                        </div>
+                    </div>
+
+                    <p class="ww-pf-result-count" role="status" aria-live="polite">Showing 8 of 8 expenses</p>
+                </section>
+
+                <section class="ww-panel ww-pf-txns ww-pf-span-12">
+                    <div class="ww-trend-head">
+                        <h3>Your expenses</h3>
+                        <a href="{{ url_for('add_expense') }}" class="ww-pf-panel-action">+ Add</a>
+                    </div>
+
+                    <ul class="ww-txns">
+                        <li class="ww-txn" data-category="Food" data-date="2026-10-20" data-amount="2650">
+                            <span class="ww-pf-dot is-food" aria-hidden="true">F</span>
+                            <div class="ww-txn-main">
+                                <div class="ww-txn-name">Monthly grocery stock-up</div>
+                                <div class="ww-txn-meta">Food · Today</div>
+                            </div>
+                            <span class="ww-txn-amt">−₹2,650</span>
+                            <div class="ww-pf-row-actions">
+                                <a href="{{ url_for('edit_expense', id=412) }}" class="ww-pf-row-action"
+                                   aria-label="Edit monthly grocery stock-up" title="Edit">✎</a>
+                                <a href="{{ url_for('delete_expense', id=412) }}" class="ww-pf-row-action is-danger"
+                                   aria-label="Delete monthly grocery stock-up" title="Delete">🗑</a>
+                            </div>
+                        </li>
+                        <li class="ww-txn" data-category="Transport" data-date="2026-10-20" data-amount="180">
+                            <span class="ww-pf-dot is-transport" aria-hidden="true">T</span>
+                            <div class="ww-txn-main">
+                                <div class="ww-txn-name">Auto to office</div>
+                                <div class="ww-txn-meta">Transport · Today</div>
+                            </div>
+                            <span class="ww-txn-amt">−₹180</span>
+                            <div class="ww-pf-row-actions">
+                                <a href="{{ url_for('edit_expense', id=411) }}" class="ww-pf-row-action"
+                                   aria-label="Edit auto to office" title="Edit">✎</a>
+                                <a href="{{ url_for('delete_expense', id=411) }}" class="ww-pf-row-action is-danger"
+                                   aria-label="Delete auto to office" title="Delete">🗑</a>
+                            </div>
+                        </li>
+                        <li class="ww-txn" data-category="Bills" data-date="2026-10-19" data-amount="1820">
+                            <span class="ww-pf-dot is-bills" aria-hidden="true">B</span>
+                            <div class="ww-txn-main">
+                                <div class="ww-txn-name">Electricity bill — October</div>
+                                <div class="ww-txn-meta">Bills · 19 Oct</div>
+                            </div>
+                            <span class="ww-txn-amt">−₹1,820</span>
+                            <div class="ww-pf-row-actions">
+                                <a href="{{ url_for('edit_expense', id=409) }}" class="ww-pf-row-action"
+                                   aria-label="Edit electricity bill for October" title="Edit">✎</a>
+                                <a href="{{ url_for('delete_expense', id=409) }}" class="ww-pf-row-action is-danger"
+                                   aria-label="Delete electricity bill for October" title="Delete">🗑</a>
+                            </div>
+                        </li>
+                        <li class="ww-txn" data-category="Food" data-date="2026-10-18" data-amount="1240">
+                            <span class="ww-pf-dot is-food" aria-hidden="true">F</span>
+                            <div class="ww-txn-main">
+                                <div class="ww-txn-name">Dinner with Priya</div>
+                                <div class="ww-txn-meta">Food · 18 Oct</div>
+                            </div>
+                            <span class="ww-txn-amt">−₹1,240</span>
+                            <div class="ww-pf-row-actions">
+                                <a href="{{ url_for('edit_expense', id=407) }}" class="ww-pf-row-action"
+                                   aria-label="Edit dinner with Priya" title="Edit">✎</a>
+                                <a href="{{ url_for('delete_expense', id=407) }}" class="ww-pf-row-action is-danger"
+                                   aria-label="Delete dinner with Priya" title="Delete">🗑</a>
+                            </div>
+                        </li>
+                        <li class="ww-txn" data-category="Entertainment" data-date="2026-10-18" data-amount="620">
+                            <span class="ww-pf-dot is-entertainment" aria-hidden="true">E</span>
+                            <div class="ww-txn-main">
+                                <div class="ww-txn-name">Movie night</div>
+                                <div class="ww-txn-meta">Entertainment · 18 Oct</div>
+                            </div>
+                            <span class="ww-txn-amt">−₹620</span>
+                            <div class="ww-pf-row-actions">
+                                <a href="{{ url_for('edit_expense', id=406) }}" class="ww-pf-row-action"
+                                   aria-label="Edit movie night" title="Edit">✎</a>
+                                <a href="{{ url_for('delete_expense', id=406) }}" class="ww-pf-row-action is-danger"
+                                   aria-label="Delete movie night" title="Delete">🗑</a>
+                            </div>
+                        </li>
+                        <li class="ww-txn" data-category="Health" data-date="2026-10-17" data-amount="480">
+                            <span class="ww-pf-dot is-health" aria-hidden="true">H</span>
+                            <div class="ww-txn-main">
+                                <div class="ww-txn-name">Pharmacy refill</div>
+                                <div class="ww-txn-meta">Health · 17 Oct</div>
+                            </div>
+                            <span class="ww-txn-amt">−₹480</span>
+                            <div class="ww-pf-row-actions">
+                                <a href="{{ url_for('edit_expense', id=404) }}" class="ww-pf-row-action"
+                                   aria-label="Edit pharmacy refill" title="Edit">✎</a>
+                                <a href="{{ url_for('delete_expense', id=404) }}" class="ww-pf-row-action is-danger"
+                                   aria-label="Delete pharmacy refill" title="Delete">🗑</a>
+                            </div>
+                        </li>
+                        <li class="ww-txn" data-category="Shopping" data-date="2026-10-16" data-amount="2180">
+                            <span class="ww-pf-dot is-shopping" aria-hidden="true">S</span>
+                            <div class="ww-txn-main">
+                                <div class="ww-txn-name">Running shoes</div>
+                                <div class="ww-txn-meta">Shopping · 16 Oct</div>
+                            </div>
+                            <span class="ww-txn-amt">−₹2,180</span>
+                            <div class="ww-pf-row-actions">
+                                <a href="{{ url_for('edit_expense', id=402) }}" class="ww-pf-row-action"
+                                   aria-label="Edit running shoes" title="Edit">✎</a>
+                                <a href="{{ url_for('delete_expense', id=402) }}" class="ww-pf-row-action is-danger"
+                                   aria-label="Delete running shoes" title="Delete">🗑</a>
+                            </div>
+                        </li>
+                        <li class="ww-txn" data-category="Transport" data-date="2026-10-15" data-amount="500">
+                            <span class="ww-pf-dot is-transport" aria-hidden="true">T</span>
+                            <div class="ww-txn-main">
+                                <div class="ww-txn-name">Metro card top-up</div>
+                                <div class="ww-txn-meta">Transport · 15 Oct</div>
+                            </div>
+                            <span class="ww-txn-amt">−₹500</span>
+                            <div class="ww-pf-row-actions">
+                                <a href="{{ url_for('edit_expense', id=399) }}" class="ww-pf-row-action"
+                                   aria-label="Edit metro card top-up" title="Edit">✎</a>
+                                <a href="{{ url_for('delete_expense', id=399) }}" class="ww-pf-row-action is-danger"
+                                   aria-label="Delete metro card top-up" title="Delete">🗑</a>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <p class="ww-pf-empty" hidden>No expenses match these filters.</p>
+                </section>
+
+                <section class="ww-panel ww-pf-quickadd ww-pf-span-12">
+                    <h3>Quick add with AI</h3>
+                    <div class="ww-pf-quickadd-row">
+                        <div class="ww-pf-field">
+                            <label for="pf-quickadd">Describe the expense</label>
+                            <input id="pf-quickadd" class="form-input" type="text"
+                                   placeholder="paid 340 for uber to airport yesterday"
+                                   disabled aria-disabled="true" aria-describedby="pf-quickadd-note"
+                                   title="Preview only — natural-language entry is not wired up yet.">
+                        </div>
+                        <button type="button" class="ww-btn" disabled aria-disabled="true"
+                                title="Preview only — natural-language entry is not wired up yet.">Parse</button>
+                    </div>
+                    <ul class="ww-pf-chips" aria-hidden="true">
+                        <li class="ww-pf-chip">₹340</li>
+                        <li class="ww-pf-chip">Transport</li>
+                        <li class="ww-pf-chip">Uber to airport</li>
+                        <li class="ww-pf-chip">19 Oct 2026</li>
+                    </ul>
+                    <p id="pf-quickadd-note" class="ww-pf-note">Preview only — nothing is saved yet.</p>
+                </section>
+
+            </div>
+        </section>
+
+        <!-- ============================ BUDGETS ======================= -->
+        <section id="panel-budgets" role="tabpanel" aria-labelledby="tab-budgets"
+                 class="ww-tabpanel" tabindex="0" hidden>
+
+            <div class="ww-pf-grid">
+
+                <section class="ww-panel ww-balance ww-pf-span-4">
+                    <h3>October budget</h3>
+                    <div class="ww-balance-top">
+                        <div class="ww-amount">₹25,000</div>
+                        <span class="ww-tag">73% used</span>
+                    </div>
+                    <div class="ww-meter" role="img" aria-label="₹18,240 of the ₹25,000 monthly budget used, 73%">
+                        <span style="width: 73%"></span>
+                    </div>
+                    <div class="ww-balance-foot">
+                        <span>₹18,240 spent</span>
+                        <span>₹6,760 left</span>
+                    </div>
+                    <p class="ww-pf-hint">
+                        <span class="ww-pf-ai-badge">AI</span>
+                        Two categories are above 85% with 11 days to go — Bills and Transport.
+                    </p>
+                </section>
+
+                <section class="ww-panel ww-pf-span-8">
+                    <div class="ww-trend-head">
+                        <h3>Category budgets</h3>
+                        <button type="button" class="ww-pf-panel-action is-btn" disabled aria-disabled="true"
+                                title="Coming in a later step.">Edit limits</button>
+                    </div>
+
+                    <ul class="ww-pf-budgets">
+                        <li class="ww-pf-budget-row">
+                            <div class="ww-pf-budget-head">
+                                <span><i class="ww-c-food" aria-hidden="true"></i>Food</span>
+                                <span class="ww-pf-budget-fig">₹5,840 <em>/ ₹7,000</em></span>
+                            </div>
+                            <div class="ww-meter" role="img" aria-label="Food: ₹5,840 of ₹7,000 used, 83%">
+                                <span style="width: 83%"></span>
+                            </div>
+                        </li>
+                        <li class="ww-pf-budget-row">
+                            <div class="ww-pf-budget-head">
+                                <span><i class="ww-c-bills" aria-hidden="true"></i>Bills</span>
+                                <span class="ww-pf-budget-fig is-warn">₹3,920 <em>/ ₹4,500</em></span>
+                            </div>
+                            <div class="ww-meter" role="img" aria-label="Bills: ₹3,920 of ₹4,500 used, 87%">
+                                <span style="width: 87%"></span>
+                            </div>
+                        </li>
+                        <li class="ww-pf-budget-row">
+                            <div class="ww-pf-budget-head">
+                                <span><i class="ww-c-transport" aria-hidden="true"></i>Transport</span>
+                                <span class="ww-pf-budget-fig is-warn">₹2,610 <em>/ ₹3,000</em></span>
+                            </div>
+                            <div class="ww-meter" role="img" aria-label="Transport: ₹2,610 of ₹3,000 used, 87%">
+                                <span style="width: 87%"></span>
+                            </div>
+                        </li>
+                        <li class="ww-pf-budget-row">
+                            <div class="ww-pf-budget-head">
+                                <span><i class="ww-c-shopping" aria-hidden="true"></i>Shopping</span>
+                                <span class="ww-pf-budget-fig">₹2,180 <em>/ ₹3,500</em></span>
+                            </div>
+                            <div class="ww-meter" role="img" aria-label="Shopping: ₹2,180 of ₹3,500 used, 62%">
+                                <span style="width: 62%"></span>
+                            </div>
+                        </li>
+                        <li class="ww-pf-budget-row">
+                            <div class="ww-pf-budget-head">
+                                <span><i class="ww-c-entertainment" aria-hidden="true"></i>Entertainment</span>
+                                <span class="ww-pf-budget-fig">₹1,540 <em>/ ₹2,500</em></span>
+                            </div>
+                            <div class="ww-meter" role="img" aria-label="Entertainment: ₹1,540 of ₹2,500 used, 62%">
+                                <span style="width: 62%"></span>
+                            </div>
+                        </li>
+                        <li class="ww-pf-budget-row">
+                            <div class="ww-pf-budget-head">
+                                <span><i class="ww-c-health" aria-hidden="true"></i>Health</span>
+                                <span class="ww-pf-budget-fig">₹1,310 <em>/ ₹2,500</em></span>
+                            </div>
+                            <div class="ww-meter" role="img" aria-label="Health: ₹1,310 of ₹2,500 used, 52%">
+                                <span style="width: 52%"></span>
+                            </div>
+                        </li>
+                        <li class="ww-pf-budget-row">
+                            <div class="ww-pf-budget-head">
+                                <span><i class="ww-c-other" aria-hidden="true"></i>Other</span>
+                                <span class="ww-pf-budget-fig">₹840 <em>/ ₹2,000</em></span>
+                            </div>
+                            <div class="ww-meter" role="img" aria-label="Other: ₹840 of ₹2,000 used, 42%">
+                                <span style="width: 42%"></span>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <p class="ww-pf-note">Category limits total ₹25,000 — the same as your monthly budget.</p>
+                </section>
+
+            </div>
+        </section>
+
+        <!-- ========================= SAVINGS GOALS ==================== -->
+        <section id="panel-goals" role="tabpanel" aria-labelledby="tab-goals"
+                 class="ww-tabpanel" tabindex="0" hidden>
+
+            <div class="ww-pf-grid">
+
+                <section class="ww-panel ww-pf-span-12">
+                    <div class="ww-trend-head">
+                        <h3>Savings goals</h3>
+                        <button type="button" class="ww-pf-panel-action is-btn" disabled aria-disabled="true"
+                                title="Coming in a later step.">+ New goal</button>
+                    </div>
+
+                    <ul class="ww-pf-goals">
+                        <li class="ww-pf-goal">
+                            <div class="ww-pf-goal-top">
+                                <span class="ww-pf-goal-ico" aria-hidden="true">▣</span>
+                                <div>
+                                    <h4 class="ww-pf-goal-name">New laptop</h4>
+                                    <p class="ww-pf-goal-meta">Target December 2026</p>
+                                </div>
+                                <span class="ww-tag">61%</span>
+                            </div>
+                            <div class="ww-meter" role="img" aria-label="New laptop: ₹52,000 saved of ₹85,000, 61%">
+                                <span style="width: 61%"></span>
+                            </div>
+                            <div class="ww-balance-foot">
+                                <span>₹52,000 saved</span>
+                                <span>₹33,000 to go</span>
+                            </div>
+                        </li>
+
+                        <li class="ww-pf-goal">
+                            <div class="ww-pf-goal-top">
+                                <span class="ww-pf-goal-ico" aria-hidden="true">⛨</span>
+                                <div>
+                                    <h4 class="ww-pf-goal-name">Emergency fund</h4>
+                                    <p class="ww-pf-goal-meta">Six months of expenses</p>
+                                </div>
+                                <span class="ww-tag">65%</span>
+                            </div>
+                            <div class="ww-meter" role="img" aria-label="Emergency fund: ₹78,000 saved of ₹120,000, 65%">
+                                <span style="width: 65%"></span>
+                            </div>
+                            <div class="ww-balance-foot">
+                                <span>₹78,000 saved</span>
+                                <span>₹42,000 to go</span>
+                            </div>
+                        </li>
+
+                        <li class="ww-pf-goal">
+                            <div class="ww-pf-goal-top">
+                                <span class="ww-pf-goal-ico" aria-hidden="true">✈</span>
+                                <div>
+                                    <h4 class="ww-pf-goal-name">Goa trip</h4>
+                                    <p class="ww-pf-goal-meta">Target March 2027</p>
+                                </div>
+                                <span class="ww-tag">36%</span>
+                            </div>
+                            <div class="ww-meter" role="img" aria-label="Goa trip: ₹14,400 saved of ₹40,000, 36%">
+                                <span style="width: 36%"></span>
+                            </div>
+                            <div class="ww-balance-foot">
+                                <span>₹14,400 saved</span>
+                                <span>₹25,600 to go</span>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <p class="ww-pf-note">
+                        ₹144,400 saved across three goals, out of ₹245,000 targeted — 59% of the way there.
+                    </p>
+                </section>
+
+            </div>
+        </section>
+
+    </div>
+</div>
+{% endblock %}

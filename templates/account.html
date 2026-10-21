@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Account — Waffle Wallet{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+{% endblock %}
+
+{% block nav_links %}{% endblock %}
+
+{% block content %}
+{#
+  Static page. The only genuinely working control here is Sign out, which
+  points at the existing `logout` route. Everything else is a preview.
+#}
+{% set pf_name = request.session.get('user_name') or 'Aarav Mehta' %}
+{% set pf_email = request.session.get('email') or 'aarav.mehta@example.com' %}
+{% set pf_initials = 'AM' %}
+{% set active = 'account' %}
+
+<div class="ww-app ww-pf">
+    {% include "_sidebar.html" %}
+
+    <div class="ww-app-main">
+
+        <h1 class="ww-pf-name">Account</h1>
+        <p class="ww-pf-since">Manage how you appear and how you sign in.</p>
+
+        <div class="ww-pf-grid">
+
+            <!-- Avatar ---------------------------------------------------- -->
+            <section class="ww-panel ww-pf-span-4">
+                <h3>Avatar</h3>
+                <div class="ww-acct-avatar-row">
+                    <div class="ww-pf-avatar is-lg" aria-hidden="true">{{ pf_initials }}</div>
+                    <div>
+                        <p class="ww-pf-note" style="margin-top:0">
+                            Your initials are generated from your name. Upload a picture to
+                            replace them.
+                        </p>
+                        <div class="ww-acct-avatar-actions">
+                            <button type="button" class="ww-btn ww-btn-ghost" disabled aria-disabled="true"
+                                    title="Coming in a later step.">Upload image</button>
+                            <button type="button" class="ww-btn ww-btn-ghost" disabled aria-disabled="true"
+                                    title="Coming in a later step.">Remove</button>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="ww-pf-note">Pick an accent colour</p>
+                <ul class="ww-acct-swatches" role="group" aria-label="Avatar colour (preview only)">
+                    <li><button type="button" class="ww-acct-swatch is-active ww-c-food"
+                                aria-label="Lime" disabled aria-disabled="true"></button></li>
+                    <li><button type="button" class="ww-acct-swatch ww-c-transport"
+                                aria-label="Coral" disabled aria-disabled="true"></button></li>
+                    <li><button type="button" class="ww-acct-swatch ww-c-health"
+                                aria-label="Teal" disabled aria-disabled="true"></button></li>
+                    <li><button type="button" class="ww-acct-swatch ww-c-entertainment"
+                                aria-label="Amber" disabled aria-disabled="true"></button></li>
+                    <li><button type="button" class="ww-acct-swatch ww-c-shopping"
+                                aria-label="Lilac" disabled aria-disabled="true"></button></li>
+                </ul>
+            </section>
+
+            <!-- Profile details ------------------------------------------- -->
+            <section class="ww-panel ww-pf-span-8">
+                <h3>Profile details</h3>
+
+                <div class="ww-acct-fields">
+                    <div class="ww-pf-field">
+                        <label for="acct-name">Full name</label>
+                        <input id="acct-name" class="form-input" type="text" value="{{ pf_name }}"
+                               disabled aria-disabled="true" title="Coming in a later step.">
+                    </div>
+                    <div class="ww-pf-field">
+                        <label for="acct-email">Email address</label>
+                        <input id="acct-email" class="form-input" type="email" value="{{ pf_email }}"
+                               disabled aria-disabled="true" title="Coming in a later step.">
+                    </div>
+                </div>
+
+                <dl class="ww-acct-meta">
+                    <div>
+                        <dt>Member since</dt>
+                        <dd>March 2026</dd>
+                    </div>
+                    <div>
+                        <dt>Expenses logged</dt>
+                        <dd>412</dd>
+                    </div>
+                    <div>
+                        <dt>Lifetime spend</dt>
+                        <dd>₹116,400</dd>
+                    </div>
+                </dl>
+
+                <div class="ww-pf-actions">
+                    <button type="button" class="ww-btn" disabled aria-disabled="true"
+                            title="Coming in a later step.">Save changes</button>
+                    <span class="ww-pf-note">Preview only — nothing is saved yet.</span>
+                </div>
+            </section>
+
+            <!-- Password -------------------------------------------------- -->
+            <section class="ww-panel ww-pf-span-8">
+                <h3>Change password</h3>
+                <p class="ww-pf-note" style="margin-top:0">
+                    Passwords are stored as bcrypt hashes and are never shown back to you.
+                </p>
+
+                <div class="ww-acct-fields">
+                    <div class="ww-pf-field">
+                        <label for="acct-pw-old">Current password</label>
+                        <input id="acct-pw-old" class="form-input" type="password" autocomplete="off"
+                               disabled aria-disabled="true" title="Coming in a later step.">
+                    </div>
+                    <div class="ww-pf-field">
+                        <label for="acct-pw-new">New password</label>
+                        <input id="acct-pw-new" class="form-input" type="password" autocomplete="off"
+                               disabled aria-disabled="true" aria-describedby="acct-pw-hint"
+                               title="Coming in a later step.">
+                    </div>
+                    <div class="ww-pf-field">
+                        <label for="acct-pw-confirm">Confirm new password</label>
+                        <input id="acct-pw-confirm" class="form-input" type="password" autocomplete="off"
+                               disabled aria-disabled="true" title="Coming in a later step.">
+                    </div>
+                </div>
+                <p id="acct-pw-hint" class="ww-pf-note">Minimum eight characters, matching the rule used at sign-up.</p>
+
+                <div class="ww-pf-actions">
+                    <button type="button" class="ww-btn" disabled aria-disabled="true"
+                            title="Coming in a later step.">Update password</button>
+                </div>
+            </section>
+
+            <!-- Session -------------------------------------------------- -->
+            <section class="ww-panel ww-pf-span-4">
+                <h3>Session</h3>
+                <p class="ww-pf-note" style="margin-top:0">
+                    You're signed in on this device. Signing out clears the session cookie.
+                </p>
+                <div class="ww-pf-actions">
+                    <a href="{{ url_for('logout') }}" class="ww-btn ww-btn-lg">Sign out</a>
+                </div>
+                <p class="ww-pf-note">This one works — it's the live logout route.</p>
+            </section>
+
+            <!-- Danger zone ---------------------------------------------- -->
+            <section class="ww-panel ww-acct-danger ww-pf-span-12">
+                <h3>Danger zone</h3>
+                <p class="ww-pf-note" style="margin-top:0">
+                    Deleting your account removes every expense you've logged. This cannot be undone.
+                </p>
+                <div class="ww-pf-actions">
+                    <button type="button" class="ww-pf-action is-danger" disabled aria-disabled="true"
+                            title="Coming in a later step.">Delete account</button>
+                    <button type="button" class="ww-btn ww-btn-ghost" disabled aria-disabled="true"
+                            title="Coming in a later step.">Export my data</button>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

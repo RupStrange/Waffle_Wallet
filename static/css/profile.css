@@ -1,0 +1,556 @@
+/* profile.css — dashboard-only styles. Loaded AFTER app.css, which owns the
+   app shell (sidebar, top bar, tabs, avatar, grid, fields, disabled states).
+   Nothing shared with account.html / preferences.html belongs in here. */
+
+/* ---------------------------------------------------------------- */
+/* 1. Category swatches missing from style.css                      */
+/* The model has seven categories; style.css only covers three of   */
+/* them (food, bills, shopping). These four complete the set.       */
+/* ---------------------------------------------------------------- */
+
+.ww-c-transport     { background: var(--ww-gold); }
+.ww-c-health        { background: #7FD1C1; }
+.ww-c-entertainment { background: #F2B861; }
+.ww-c-other         { background: #6B5E8A; }
+
+/* ---------------------------------------------------------------- */
+/* 2. Balance strip (income vs expenses)                            */
+/* ---------------------------------------------------------------- */
+
+.ww-pf-balance-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+}
+
+.ww-pf-balance-strip > li {
+    padding: 1.15rem 1.3rem;
+    background: var(--ww-card);
+    border: 1px solid var(--ww-line);
+    border-radius: 20px;
+}
+
+.ww-pf-kpi-value.is-in  { color: #22C55E; }
+.ww-pf-kpi-value.is-out { color: var(--ww-danger); }
+
+/* ---------------------------------------------------------------- */
+/* 3. KPI tiles                                                     */
+/* ---------------------------------------------------------------- */
+
+.ww-pf-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+}
+
+.ww-pf-kpi {
+    padding: 1.15rem 1.3rem;
+    background: var(--ww-card);
+    border: 1px solid var(--ww-line);
+    border-radius: 20px;
+}
+
+.ww-pf-kpi-label {
+    display: block;
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ww-muted);
+}
+
+.ww-pf-kpi-value {
+    margin-top: 0.45rem;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    line-height: 1.1;
+    color: var(--ww-charcoal);
+}
+
+.ww-pf-kpi-foot {
+    margin: 0.4rem 0 0;
+    font-size: 0.78rem;
+    color: var(--ww-muted);
+}
+
+.ww-pf-trendchip {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.ww-pf-trendchip.is-up {
+    background: var(--ww-danger-bg);
+    color: var(--ww-gold);
+}
+
+.ww-pf-trendchip.is-down {
+    background: rgba(213, 243, 106, 0.14);
+    color: var(--ww-forest);
+}
+
+/* ---------------------------------------------------------------- */
+/* 4. Spending habits                                               */
+/* ---------------------------------------------------------------- */
+
+.ww-pf-habits {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 1.4rem;
+    margin: 0.8rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ww-pf-habit-num {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    color: var(--ww-forest);
+}
+
+.ww-pf-habit-label {
+    margin: 0.2rem 0 0;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: var(--ww-muted);
+}
+
+/* ---------------------------------------------------------------- */
+/* 5. Category legend — percentage column                           */
+/* .ww-legend em already has margin-left:auto, so the percentage    */
+/* needs a fixed column of its own to stop the two colliding.       */
+/* ---------------------------------------------------------------- */
+
+.ww-pf-cats li {
+    gap: 0.6rem;
+}
+
+.ww-pf-cats .ww-pf-cat-pct {
+    min-width: 3.4rem;
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--ww-muted);
+}
+
+/* ---------------------------------------------------------------- */
+/* 6. Expense list                                                  */
+/* ---------------------------------------------------------------- */
+
+/* Single column here — style.css lays .ww-txns out in two columns with a
+   3rem gutter, which leaves no room for the per-row edit/delete actions.
+   Dropping to one column means :nth-child(-n+2) strips the border from
+   row 2 as well, so restore it. */
+.ww-pf-txns .ww-txns {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.ww-pf-txns .ww-txn:nth-child(2) {
+    border-top: 1px solid var(--ww-line);
+}
+
+.ww-pf-txns .ww-txn {
+    padding-right: 0.5rem;
+}
+
+.ww-pf-panel-action {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ww-forest);
+    text-decoration: none;
+}
+
+.ww-pf-panel-action:hover {
+    color: var(--ww-gold);
+}
+
+.ww-pf-panel-action.is-btn {
+    padding: 0.4rem 0.8rem;
+    background: transparent;
+    border: 1px solid var(--ww-line);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    cursor: pointer;
+}
+
+/* Category dots.
+   style.css:1007-1009 sets .ww-txn .ww-txn-dot and two :nth-child overrides
+   at specificity 0,3,0 — a bare .ww-c-* class (0,1,0) loses to those, which
+   silently turns rows 3 and 4 lilac. These rules are 0,4,0 and win outright
+   rather than relying on source order. */
+.ww-pf-txns .ww-txn .ww-pf-dot {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    flex: none;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #211B2C;
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.ww-pf-txns .ww-txn:hover .ww-pf-dot {
+    transform: scale(1.15);
+    filter: brightness(1.1);
+}
+
+.ww-pf-txns .ww-txn .ww-pf-dot.is-food          { background: var(--ww-forest); }
+.ww-pf-txns .ww-txn .ww-pf-dot.is-transport     { background: var(--ww-gold); }
+.ww-pf-txns .ww-txn .ww-pf-dot.is-bills         { background: #9385B5; }
+.ww-pf-txns .ww-txn .ww-pf-dot.is-health        { background: #7FD1C1; }
+.ww-pf-txns .ww-txn .ww-pf-dot.is-entertainment { background: #F2B861; }
+.ww-pf-txns .ww-txn .ww-pf-dot.is-shopping      { background: #C4B8E0; }
+.ww-pf-txns .ww-txn .ww-pf-dot.is-other         { background: #6B5E8A; color: #F8F5F0; }
+
+/* Row actions — revealed with opacity, never display:none, so the links stay
+   in the tab order, and shown on :focus-within for keyboard users. */
+.ww-pf-row-actions {
+    display: flex;
+    gap: 0.3rem;
+    margin-left: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.12s ease;
+}
+
+.ww-txn:hover .ww-pf-row-actions,
+.ww-txn:focus-within .ww-pf-row-actions {
+    opacity: 1;
+}
+
+.ww-pf-row-action {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    flex: none;
+    border-radius: 8px;
+    color: var(--ww-muted);
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: color 0.12s ease, background 0.12s ease;
+}
+
+.ww-pf-row-action:hover,
+.ww-pf-row-action:focus-visible {
+    background: var(--ww-mint);
+    color: var(--ww-forest);
+}
+
+.ww-pf-row-action.is-danger:hover,
+.ww-pf-row-action.is-danger:focus-visible {
+    background: var(--ww-danger-bg);
+    color: var(--ww-danger);
+}
+
+.ww-pf-empty {
+    margin: 0;
+    padding: 2rem;
+    text-align: center;
+    font-size: 0.88rem;
+    color: var(--ww-muted);
+}
+
+/* ---------------------------------------------------------------- */
+/* 7. Toolbar — time travel and filters                             */
+/* ---------------------------------------------------------------- */
+
+.ww-pf-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.ww-pf-timetravel {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid var(--ww-line);
+}
+
+.ww-pf-timetravel .ww-pf-note {
+    flex: 1 1 100%;
+    margin: 0;
+}
+
+.ww-pf-daychips {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.ww-pf-daychip {
+    padding: 0.45rem 0.8rem;
+    background: transparent;
+    border: 1px solid var(--ww-line);
+    border-radius: 999px;
+    color: var(--ww-muted);
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.ww-pf-daychip:hover {
+    border-color: var(--ww-gold);
+    color: var(--ww-gold);
+}
+
+.ww-pf-daychip.is-active {
+    background: var(--ww-forest);
+    border-color: var(--ww-forest);
+    color: #211B2C;
+    font-weight: 600;
+}
+
+.ww-pf-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.9rem;
+    align-items: end;
+}
+
+.ww-pf-field-reset {
+    justify-content: flex-end;
+}
+
+.ww-pf-result-count {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--ww-muted);
+}
+
+/* ---------------------------------------------------------------- */
+/* 8. Budgets                                                       */
+/* ---------------------------------------------------------------- */
+
+.ww-pf-budgets {
+    margin: 0.9rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ww-pf-budget-row + .ww-pf-budget-row {
+    margin-top: 0.95rem;
+}
+
+.ww-pf-budget-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.4rem;
+    font-size: 0.88rem;
+    color: var(--ww-charcoal);
+}
+
+.ww-pf-budget-head > span:first-child {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ww-pf-budget-head i {
+    width: 10px;
+    height: 10px;
+    flex: none;
+    border-radius: 999px;
+}
+
+.ww-pf-budget-fig {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.ww-pf-budget-fig em {
+    font-style: normal;
+    font-weight: 400;
+    color: var(--ww-muted);
+}
+
+.ww-pf-budget-fig.is-warn {
+    color: var(--ww-gold);
+}
+
+/* ---------------------------------------------------------------- */
+/* 9. Savings goals                                                 */
+/* ---------------------------------------------------------------- */
+
+.ww-pf-goals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin: 0.9rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ww-pf-goal {
+    padding: 1.1rem 1.2rem;
+    background: var(--ww-mint-soft);
+    border: 1px solid var(--ww-line);
+    border-radius: 18px;
+}
+
+.ww-pf-goal-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    margin-bottom: 0.9rem;
+}
+
+.ww-pf-goal-top > div {
+    min-width: 0;
+    margin-right: auto;
+}
+
+.ww-pf-goal-ico {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    flex: none;
+    border-radius: 11px;
+    background: var(--ww-mint);
+    color: var(--ww-forest);
+    font-size: 0.95rem;
+}
+
+.ww-pf-goal-name {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ww-charcoal);
+}
+
+.ww-pf-goal-meta {
+    margin: 0.15rem 0 0;
+    font-size: 0.76rem;
+    color: var(--ww-muted);
+}
+
+/* ---------------------------------------------------------------- */
+/* 10. AI surfaces                                                  */
+/* ---------------------------------------------------------------- */
+
+.ww-pf-ai {
+    border-color: var(--ww-forest);
+}
+
+.ww-pf-ai-badge {
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: rgba(147, 133, 181, 0.22);
+    color: var(--ww-mint-mid);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+}
+
+.ww-pf-ai-body {
+    margin: 0.8rem 0 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--ink-soft, var(--ww-charcoal));
+}
+
+.ww-pf-ai-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.ww-pf-quickadd-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.6rem;
+    margin-top: 0.8rem;
+}
+
+.ww-pf-quickadd-row .ww-pf-field {
+    flex: 1;
+}
+
+.ww-pf-chips {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin: 0.8rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ww-pf-chip {
+    padding: 0.3rem 0.65rem;
+    border: 1px dashed var(--ww-line);
+    border-radius: 999px;
+    color: var(--ww-muted);
+    font-size: 0.78rem;
+    opacity: 0.75;
+    cursor: not-allowed;
+}
+
+.ww-pf-hint {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: 1rem 0 0;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--ww-line);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--ww-muted);
+}
+
+/* ---------------------------------------------------------------- */
+/* 11. Responsive                                                   */
+/* ---------------------------------------------------------------- */
+
+@media (max-width: 960px) {
+    .ww-pf-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ww-pf-balance-strip { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+}
+
+@media (max-width: 520px) {
+    .ww-pf-kpis,
+    .ww-pf-habits,
+    .ww-pf-balance-strip,
+    .ww-pf-filters { grid-template-columns: minmax(0, 1fr); }
+    .ww-pf-timetravel { flex-direction: column; align-items: stretch; }
+    .ww-pf-quickadd-row { flex-direction: column; align-items: stretch; }
+    .ww-pf-quickadd-row .ww-btn { width: 100%; }
+}
+
+/* No hover to reveal the row actions with, so show them always. */
+@media (hover: none) {
+    .ww-pf-row-actions { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ww-pf-row-actions,
+    .ww-pf-row-action,
+    .ww-pf-daychip,
+    .ww-pf-txns .ww-txn .ww-pf-dot {
+        transition: none;
+    }
+    .ww-pf-txns .ww-txn:hover .ww-pf-dot {
+        transform: none;
+    }
+}

@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Preferences — Waffle Wallet{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+{% endblock %}
+
+{% block nav_links %}{% endblock %}
+
+{% block content %}
+{#
+  Static page. Every control is a preview — nothing persists, because there is
+  no settings model yet. See the handoff note in the spec.
+#}
+{% set pf_name = request.session.get('user_name') or 'Aarav Mehta' %}
+{% set pf_email = request.session.get('email') or 'aarav.mehta@example.com' %}
+{% set pf_initials = 'AM' %}
+{% set active = 'preferences' %}
+
+<div class="ww-app ww-pf">
+    {% include "_sidebar.html" %}
+
+    <div class="ww-app-main">
+
+        <h1 class="ww-pf-name">Preferences</h1>
+        <p class="ww-pf-since">Defaults applied across the app. None of these save yet.</p>
+
+        <div class="ww-pf-grid">
+
+            <!-- Regional -------------------------------------------------- -->
+            <section class="ww-panel ww-pf-span-6">
+                <h3>Regional</h3>
+                <div class="ww-acct-fields">
+                    <div class="ww-pf-field">
+                        <label for="prf-currency">Currency</label>
+                        <select id="prf-currency" class="form-input" disabled aria-disabled="true"
+                                title="Coming in a later step.">
+                            <option selected>₹ Indian Rupee (INR)</option>
+                            <option>$ US Dollar (USD)</option>
+                            <option>€ Euro (EUR)</option>
+                            <option>£ Pound Sterling (GBP)</option>
+                        </select>
+                    </div>
+                    <div class="ww-pf-field">
+                        <label for="prf-dateformat">Date format</label>
+                        <select id="prf-dateformat" class="form-input" disabled aria-disabled="true"
+                                title="Coming in a later step.">
+                            <option selected>20 Oct 2026</option>
+                            <option>20/10/2026</option>
+                            <option>10/20/2026</option>
+                            <option>2026-10-20</option>
+                        </select>
+                    </div>
+                    <div class="ww-pf-field">
+                        <label for="prf-week">Week starts on</label>
+                        <select id="prf-week" class="form-input" disabled aria-disabled="true"
+                                title="Coming in a later step.">
+                            <option selected>Monday</option>
+                            <option>Sunday</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Logging defaults ------------------------------------------ -->
+            <section class="ww-panel ww-pf-span-6">
+                <h3>Logging defaults</h3>
+                <div class="ww-acct-fields">
+                    <div class="ww-pf-field">
+                        <label for="prf-cat">Default category</label>
+                        <select id="prf-cat" class="form-input" disabled aria-disabled="true"
+                                title="Coming in a later step.">
+                            <option selected>Food</option>
+                            <option>Transport</option>
+                            <option>Bills</option>
+                            <option>Health</option>
+                            <option>Entertainment</option>
+                            <option>Shopping</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="ww-pf-field">
+                        <label for="prf-budget">Monthly budget</label>
+                        <input id="prf-budget" class="form-input" type="text" value="₹25,000"
+                               disabled aria-disabled="true" title="Coming in a later step.">
+                    </div>
+                    <div class="ww-pf-field">
+                        <label for="prf-startday">Budget month starts on</label>
+                        <select id="prf-startday" class="form-input" disabled aria-disabled="true"
+                                title="Coming in a later step.">
+                            <option selected>1st of the month</option>
+                            <option>Payday (last working day)</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Appearance ------------------------------------------------ -->
+            <section class="ww-panel ww-pf-span-6">
+                <h3>Appearance</h3>
+                <fieldset class="ww-prf-fieldset" disabled aria-disabled="true">
+                    <legend class="ww-pf-note">Theme — preview only</legend>
+                    <div class="ww-prf-radios">
+                        <label class="ww-prf-radio">
+                            <input type="radio" name="prf-theme" checked disabled>
+                            <span>Dark <em>Current</em></span>
+                        </label>
+                        <label class="ww-prf-radio">
+                            <input type="radio" name="prf-theme" disabled>
+                            <span>Light</span>
+                        </label>
+                        <label class="ww-prf-radio">
+                            <input type="radio" name="prf-theme" disabled>
+                            <span>Match system</span>
+                        </label>
+                    </div>
+                </fieldset>
+                <p class="ww-pf-note">
+                    The app ships dark-only today — a light theme needs the colour tokens
+                    redefining, so this is a placeholder.
+                </p>
+            </section>
+
+            <!-- Notifications --------------------------------------------- -->
+            <section class="ww-panel ww-pf-span-6">
+                <h3>Notifications</h3>
+                <ul class="ww-prf-toggles">
+                    <li class="ww-prf-toggle">
+                        <div>
+                            <span class="ww-prf-toggle-name">Weekly summary email</span>
+                            <p class="ww-pf-note">Every Monday morning, last week's spend by category.</p>
+                        </div>
+                        <input type="checkbox" checked disabled aria-disabled="true"
+                               aria-label="Weekly summary email" title="Coming in a later step.">
+                    </li>
+                    <li class="ww-prf-toggle">
+                        <div>
+                            <span class="ww-prf-toggle-name">Budget alerts</span>
+                            <p class="ww-pf-note">When a category passes 85% of its limit.</p>
+                        </div>
+                        <input type="checkbox" checked disabled aria-disabled="true"
+                               aria-label="Budget alerts" title="Coming in a later step.">
+                    </li>
+                    <li class="ww-prf-toggle">
+                        <div>
+                            <span class="ww-prf-toggle-name">Streak reminders</span>
+                            <p class="ww-pf-note">A nudge if you haven't logged anything in two days.</p>
+                        </div>
+                        <input type="checkbox" disabled aria-disabled="true"
+                               aria-label="Streak reminders" title="Coming in a later step.">
+                    </li>
+                    <li class="ww-prf-toggle">
+                        <div>
+                            <span class="ww-prf-toggle-name">AI monthly insight</span>
+                            <p class="ww-pf-note">Generate the Waffle AI write-up at month end.</p>
+                        </div>
+                        <input type="checkbox" checked disabled aria-disabled="true"
+                               aria-label="AI monthly insight" title="Coming in a later step.">
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Data ------------------------------------------------------ -->
+            <section class="ww-panel ww-pf-span-12">
+                <h3>Data</h3>
+                <div class="ww-pf-actions">
+                    <button type="button" class="ww-btn ww-btn-ghost" disabled aria-disabled="true"
+                            title="Coming in a later step.">Export all expenses (CSV)</button>
+                    <button type="button" class="ww-btn ww-btn-ghost" disabled aria-disabled="true"
+                            title="Coming in a later step.">Import from CSV</button>
+                    <button type="button" class="ww-pf-action is-danger" disabled aria-disabled="true"
+                            title="Coming in a later step.">Clear all expenses</button>
+                </div>
+                <p class="ww-pf-note">
+                    Account deletion lives on the <a href="{{ url_for('account') }}">Account</a> page.
+                </p>
+            </section>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

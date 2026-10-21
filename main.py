@@ -9,7 +9,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from core.config import get_settings
 from dependencies import templates
 from database.db import init_db, seed_db
-from routers import pages, expenses, auth
+from routers import pages, expenses, auth, profile
 
 settings = get_settings()
 
@@ -54,6 +54,7 @@ app.add_middleware(
 app.include_router(pages.router)
 app.include_router(expenses.router)
 app.include_router(auth.router)
+app.include_router(profile.router)
 
 # --- Error handlers -------------------------------------------------------- #
 @app.exception_handler(StarletteHTTPException)

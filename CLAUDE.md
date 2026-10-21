@@ -113,7 +113,9 @@ pytest -s
 | `GET /terms` | Implemented — renders `terms.html` |
 | `GET /privacy` | Implemented — renders `privacy.html` |
 | `GET /logout` | Stub — Step 3 |
-| `GET /profile` | Stub — Step 4 |
+| `GET /profile` | Implemented — renders `profile.html` (dashboard; static placeholder data) |
+| `GET /account` | Implemented — renders `account.html` (static placeholder data) |
+| `GET /preferences` | Implemented — renders `preferences.html` (static placeholder data) |
 | `GET /expenses/add` | Stub — Step 7 |
 | `GET /expenses/{id}/edit` | Stub — Step 8 |
 | `GET /expenses/{id}/delete` | Stub — Step 9 |
